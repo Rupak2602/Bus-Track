@@ -176,7 +176,7 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 16px;
     }
 
     .btn {
@@ -608,6 +608,8 @@
 
       .hero-actions, .hero-note {
         justify-content: center;
+      
+
       }
 
       h1 {
@@ -731,6 +733,30 @@
         transition-duration: .01ms !important;
       }
     }
+
+    
+.developer-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border: 1px solid #e0e5fa;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #4f46e5;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.08);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.developer-link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.18);
+}
+
   </style>
 </head>
 
@@ -781,6 +807,10 @@
             Discover Features
           </a>
         </div>
+
+        <a href="./developer.html" class="developer-link">
+          ✨ Meet the Developer
+        </a>
 
         <div class="hero-note">
           <span>✓</span>
