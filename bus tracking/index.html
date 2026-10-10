@@ -1,0 +1,966 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f9ff">
+  <title>BusTrack — Smart Campus Transit</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --text: #172033;
+      --muted: #758098;
+      --surface: rgba(255, 255, 255, 0.76);
+      --border: rgba(255, 255, 255, 0.9);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 5% 10%, #dfe7ff 0, transparent 38%),
+        radial-gradient(ellipse at 95% 30%, #e7e1ff 0, transparent 35%),
+        #f7f9ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .navbar {
+      width: min(1180px, 92%);
+      margin: 22px auto 0;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border-radius: 22px;
+      box-shadow: 0 12px 40px rgba(40, 50, 100, 0.06);
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .brand-icon {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: white;
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      box-shadow: 0 7px 18px #4f46e544;
+      font-size: 23px;
+    }
+
+    .brand span:last-child {
+      color: var(--primary);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 13px;
+      background: #ecfdf5;
+      color: #047857;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 4px #10b98120;
+    }
+
+    .hero {
+      width: min(1180px, 92%);
+      margin: 55px auto 0;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 45px;
+      min-height: 510px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 30px;
+      border: 1px solid #e0e7ff;
+      background: #eef2ff;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .eyebrow span {
+      font-size: 16px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 5.3vw, 72px);
+      line-height: 1.07;
+      letter-spacing: -4px;
+      font-weight: 900;
+      margin-bottom: 22px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(100deg, #4f46e5, #8b5cf6 65%, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.9;
+      max-width: 480px;
+      margin-bottom: 29px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 21px;
+      border-radius: 15px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform .25s, box-shadow .25s, background .25s;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      box-shadow: 0 10px 25px #4f46e533;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 14px 30px #4f46e544;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,.8);
+      border-color: #e4e7f0;
+      color: #333d56;
+    }
+
+    .hero-note {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .hero-note span {
+      color: #10b981;
+      font-size: 16px;
+    }
+
+    /* Bus illustration */
+
+    .visual {
+      position: relative;
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+    }
+
+    .visual-glow {
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c7d2fe, #e9d5ff);
+      filter: blur(3px);
+      opacity: .75;
+    }
+
+    .orbit {
+      position: absolute;
+      width: 390px;
+      height: 390px;
+      border: 1px dashed #a5b4fc;
+      border-radius: 50%;
+      animation: rotate 35s linear infinite;
+    }
+
+    .orbit::before,
+    .orbit::after {
+      content: "";
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      background: white;
+      border: 4px solid #818cf8;
+      border-radius: 50%;
+    }
+
+    .orbit::before {
+      top: 55px;
+      right: 35px;
+    }
+
+    .orbit::after {
+      bottom: 48px;
+      left: 24px;
+      border-color: #c084fc;
+    }
+
+    .bus-card {
+      width: min(365px, 88%);
+      position: relative;
+      z-index: 1;
+      padding: 25px;
+      border: 1px solid rgba(255,255,255,.95);
+      border-radius: 30px;
+      background: rgba(255,255,255,.77);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      box-shadow: 0 30px 80px rgba(66, 56, 157, .15);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .bus-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .card-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .live-badge {
+      background: #ecfdf5;
+      color: #059669;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 8px 10px;
+      border-radius: 20px;
+    }
+
+    .bus-illustration {
+      background: linear-gradient(145deg, #eef2ff, #e0e7ff);
+      border-radius: 22px;
+      padding: 22px 10px 15px;
+      margin-bottom: 21px;
+      overflow: hidden;
+    }
+
+    .bus-illustration svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .route-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 17px;
+    }
+
+    .route-title strong {
+      font-size: 13px;
+    }
+
+    .route-title small {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .route-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .route-point {
+      width: 11px;
+      height: 11px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #6366f1;
+      box-shadow: 0 0 0 5px #6366f120;
+    }
+
+    .route-track {
+      height: 3px;
+      flex: 1;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #818cf8, #c4b5fd);
+      position: relative;
+    }
+
+    .route-track::after {
+      content: "➤";
+      position: absolute;
+      right: 40%;
+      top: -10px;
+      color: #6366f1;
+      font-size: 16px;
+    }
+
+    .route-point.end {
+      background: #10b981;
+      box-shadow: 0 0 0 5px #10b98120;
+    }
+
+    .route-labels {
+      display: flex;
+      justify-content: space-between;
+      color: #68738b;
+      font-size: 10px;
+    }
+
+    .floating-chip {
+      position: absolute;
+      z-index: 2;
+      padding: 13px 15px;
+      border: 1px solid white;
+      border-radius: 17px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 12px 35px #303c7020;
+      font-size: 11px;
+      font-weight: 800;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .chip-one {
+      top: 55px;
+      left: 0;
+    }
+
+    .chip-two {
+      bottom: 48px;
+      right: -3px;
+      animation-delay: -2s;
+    }
+
+    .chip-icon {
+      margin-right: 6px;
+      font-size: 16px;
+      vertical-align: middle;
+    }
+
+    /* Login choices */
+
+    .section {
+      width: min(1180px, 92%);
+      margin: 50px auto 0;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .section-heading .mini-label {
+      color: var(--primary);
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(26px, 3vw, 36px);
+      letter-spacing: -1.5px;
+      font-weight: 900;
+      margin-bottom: 11px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 19px;
+    }
+
+    .role-card {
+      padding: 27px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      box-shadow: 0 12px 40px rgba(35, 45, 95, .05);
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .role-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 45px rgba(35, 45, 95, .1);
+    }
+
+    .role-icon {
+      width: 55px;
+      height: 55px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      font-size: 25px;
+      margin-bottom: 20px;
+    }
+
+    .student-icon {
+      background: #e0e7ff;
+    }
+
+    .driver-icon {
+      background: #d1fae5;
+    }
+
+    .admin-icon {
+      background: #f3e8ff;
+    }
+
+    .role-card h3 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .role-card p {
+      min-height: 45px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+      margin-bottom: 22px;
+    }
+
+    .role-link {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #e4e7f0;
+      border-radius: 13px;
+      background: white;
+      color: #343b53;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      transition: background .2s, color .2s;
+    }
+
+    .role-link:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Features */
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+      margin: 55px 0 60px;
+    }
+
+    .feature {
+      text-align: center;
+      padding: 20px 12px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 19px;
+    }
+
+    .feature-icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .feature h4 {
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .feature p {
+      font-size: 10px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid #e8eaf4;
+      padding: 25px 4%;
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 2;
+    }
+
+    footer strong {
+      color: var(--primary);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 850px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-top: 50px;
+      }
+
+      .hero-content {
+        text-align: center;
+      }
+
+      .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-actions, .hero-note {
+        justify-content: center;
+      }
+
+      h1 {
+        letter-spacing: -2.5px;
+      }
+
+      .visual {
+        min-height: 430px;
+      }
+
+      .role-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role-card p {
+        min-height: auto;
+      }
+
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .chip-one {
+        left: 2%;
+      }
+
+      .chip-two {
+        right: 2%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar {
+        width: 94%;
+        margin-top: 12px;
+        padding: 11px 13px;
+        border-radius: 18px;
+      }
+
+      .brand {
+        font-size: 19px;
+      }
+
+      .brand-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 13px;
+      }
+
+      .status {
+        padding: 9px;
+        font-size: 9px;
+      }
+
+      .hero, .section {
+        width: 90%;
+      }
+
+      .hero {
+        margin-top: 43px;
+      }
+
+      h1 {
+        font-size: 43px;
+      }
+
+      .hero-description {
+        font-size: 13px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .visual {
+        min-height: 390px;
+      }
+
+      .visual-glow {
+        width: 280px;
+        height: 280px;
+      }
+
+      .orbit {
+        width: 310px;
+        height: 310px;
+      }
+
+      .bus-card {
+        padding: 18px;
+        border-radius: 24px;
+      }
+
+      .chip-one {
+        top: 15px;
+      }
+
+      .chip-two {
+        bottom: 12px;
+      }
+
+      .section {
+        margin-top: 25px;
+      }
+
+      .role-card {
+        padding: 22px;
+      }
+
+      .features {
+        gap: 9px;
+        margin-top: 35px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="navbar">
+    <a href="index.html" class="brand" aria-label="BusTrack home">
+      <div class="brand-icon">🚌</div>
+      <div>Bus<span>Track</span></div>
+    </a>
+
+    <div class="nav-right">
+      <div class="status">
+        <span class="status-dot"></span>
+        SMART TRANSIT
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="eyebrow">
+          <span>✦</span>
+          Smart Campus Transportation
+        </div>
+
+        <h1>
+          Your campus.<br>
+          Your bus.<br>
+          <span class="gradient-text">Your time.</span>
+        </h1>
+
+        <p class="hero-description">
+          Experience smarter college transportation with BusTrack.
+          Explore bus routes, access your portal and make your daily
+          campus journey simpler.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#portals" class="btn btn-primary">
+            Explore Portals <span>→</span>
+          </a>
+
+          <a href="#features" class="btn btn-secondary">
+            Discover Features
+          </a>
+        </div>
+
+        <div class="hero-note">
+          <span>✓</span>
+          Designed for students, drivers and campus administrators
+        </div>
+      </div>
+
+      <!-- DECORATIVE BUS CARD -->
+      <div class="visual" aria-label="Illustration of a college bus route">
+        <div class="visual-glow"></div>
+        <div class="orbit"></div>
+
+        <div class="floating-chip chip-one">
+          <span class="chip-icon">📍</span> Campus Routes
+        </div>
+
+        <div class="bus-card">
+          <div class="bus-card-header">
+            <div>
+              <div class="card-label">WELCOME TO</div>
+              <div class="card-title">BusTrack Transit</div>
+            </div>
+            <div class="live-badge">SMART CAMPUS</div>
+          </div>
+
+          <div class="bus-illustration">
+            <svg viewBox="0 0 320 180" role="img" aria-label="Illustration of a school bus">
+              <defs>
+                <linearGradient id="busPaint" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#818cf8"/>
+                  <stop offset="100%" stop-color="#4f46e5"/>
+                </linearGradient>
+              </defs>
+
+              <ellipse cx="160" cy="151" rx="112" ry="12" fill="#a5b4fc" opacity=".4"/>
+
+              <path d="M52 47 Q52 34 67 34 H237 Q260 34 268 56 L283 98 V130 Q283 140 270 140 H55 Q43 140 43 128 V61 Q43 47 52 47Z"
+                    fill="url(#busPaint)"/>
+
+              <path d="M62 48 H107 V91 H62Z" rx="5" fill="#dbeafe"/>
+              <path d="M117 48 H163 V91 H117Z" fill="#dbeafe"/>
+              <path d="M173 48 H219 V91 H173Z" fill="#dbeafe"/>
+
+              <path d="M229 48 H240 Q249 48 253 59 L264 91 H229Z" fill="#c7d2fe"/>
+
+              <path d="M57 102 H267 V124 H57Z" fill="#eef2ff"/>
+              <path d="M70 109 H160" stroke="#a5b4fc" stroke-width="4" stroke-linecap="round"/>
+              <path d="M70 118 H130" stroke="#c7d2fe" stroke-width="3" stroke-linecap="round"/>
+
+              <rect x="46" y="99" width="8" height="14" rx="3" fill="#fbbf24"/>
+              <rect x="272" y="99" width="7" height="14" rx="3" fill="#fca5a5"/>
+
+              <circle cx="89" cy="137" r="20" fill="#27314b"/>
+              <circle cx="89" cy="137" r="10" fill="#e2e8f0"/>
+              <circle cx="89" cy="137" r="4" fill="#94a3b8"/>
+
+              <circle cx="238" cy="137" r="20" fill="#27314b"/>
+              <circle cx="238" cy="137" r="10" fill="#e2e8f0"/>
+              <circle cx="238" cy="137" r="4" fill="#94a3b8"/>
+
+              <path d="M55 28 H100" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round"/>
+              <path d="M224 25 H265" stroke="#c4b5fd" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="287" cy="45" r="5" fill="#c4b5fd"/>
+              <circle cx="35" cy="70" r="4" fill="#818cf8"/>
+            </svg>
+          </div>
+
+          <div class="route-title">
+            <strong>Campus Journey</strong>
+            <small>Route overview</small>
+          </div>
+
+          <div class="route-line">
+            <div class="route-point"></div>
+            <div class="route-track"></div>
+            <div class="route-point end"></div>
+          </div>
+
+          <div class="route-labels">
+            <span>Pickup Stop</span>
+            <span>College Campus</span>
+          </div>
+        </div>
+
+        <div class="floating-chip chip-two">
+          <span class="chip-icon">✨</span> One Smart Platform
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTALS -->
+    <section class="section" id="portals">
+      <div class="section-heading">
+        <div class="mini-label">Choose your portal</div>
+        <h2>Welcome to your workspace</h2>
+        <p>Select your role to continue to the relevant portal.</p>
+      </div>
+
+      <div class="role-grid">
+
+        <article class="role-card">
+          <div class="role-icon student-icon">🎓</div>
+          <h3>Student Portal</h3>
+          <p>
+            Access your dashboard, explore bus routes, view trip details
+            and manage your student profile.
+          </p>
+          <a class="role-link" href="student/login.html">
+            Continue as Student <span>→</span>
+          </a>
+        </article>
+
+        <article class="role-card">
+          <div class="role-icon driver-icon">🚌</div>
+          <h3>Driver Portal</h3>
+          <p>
+            Access your driver workspace, manage trips, view assigned
+            routes and update trip information.
+          </p>
+          <a class="role-link" href="driver/login.html">
+            Continue as Driver <span>→</span>
+          </a>
+        </article>
+
+        <article class="role-card">
+          <div class="role-icon admin-icon">⚙️</div>
+          <h3>Admin Portal</h3>
+          <p>
+            Manage buses, routes, stops and transportation information
+            from your administration workspace.
+          </p>
+          <a class="role-link" href="admin/login.html">
+            Continue as Admin <span>→</span>
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+      <div class="section-heading">
+        <div class="mini-label">Made for campus life</div>
+        <h2>Everything in one place</h2>
+        <p>A cleaner and simpler way to access your campus transport portal.</p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">📍</div>
+          <h4>Bus Tracking</h4>
+          <p>Access the tracking portal when available.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🗺️</div>
+          <h4>Route Access</h4>
+          <p>Find your transport route information.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🔔</div>
+          <h4>Notifications</h4>
+          <p>Access transport updates from your portal.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">👥</div>
+          <h4>Role-Based Portals</h4>
+          <p>Separate workspaces for students, drivers and admins.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div><strong>🚌 BusTrack</strong> — Smart Campus Transportation</div>
+    <div>Designed to make campus journeys simpler.</div>
+  </footer>
+
+</body>
+</html>
+```
