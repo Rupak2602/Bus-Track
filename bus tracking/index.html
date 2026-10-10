@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f7f9ff">
-  <title>BusTrack — Smart Campus Transit</title>
-
+  <title>Movzii</title>
+  <link rel="manifest" href="./manifest.json">
+  
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
@@ -961,6 +962,15 @@
     <div>Designed to make campus journeys simpler.</div>
   </footer>
 
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js")
+        .catch(console.error);
+    });
+  }
+</script>
+
 </body>
 </html>
-```
+
