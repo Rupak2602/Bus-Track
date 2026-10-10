@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f7ff">
+  <meta name="description" content="Meet the developer behind BusTrack — Rupak Ganesh, CSE Core student at SRM IST Ramapuram.">
+  <title>Meet the Developer | BusTrack</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f7ff;
+      --ink: #17213d;
+      --blue: #4f63ef;
+      --purple: #8657ed;
+      --border: #e6eaf6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "DM Sans", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+
+    .page-glow {
+      position: fixed; z-index: -2; width: 480px; height: 480px;
+      border-radius: 50%; pointer-events: none; filter: blur(100px); opacity: .3;
+    }
+    .glow-one { top: -220px; left: -160px; background: #b4c5ff; }
+    .glow-two { right: -220px; top: 320px; background: #d9baff; opacity: .25; }
+    .glow-three { left: 25%; bottom: -350px; background: #b7e8ff; }
+
+    .navbar {
+      position: sticky; top: 0; z-index: 100; padding: 14px 24px;
+      background: rgba(255,255,255,.82); border-bottom: 1px solid #dfe5f5;
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+    }
+    .nav-inner {
+      width: min(1160px,100%); margin: auto; display: flex;
+      align-items: center; justify-content: space-between; gap: 15px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 11px;
+      font-family: "Plus Jakarta Sans",sans-serif; font-size: 21px;
+      font-weight: 800; letter-spacing: -1px;
+    }
+    .brand-icon {
+      width: 43px; height: 43px; display: grid; place-items: center;
+      border-radius: 14px; color: white;
+      background: linear-gradient(145deg,#6379ff,#5140d9);
+      box-shadow: 0 7px 20px #5b6ce43a; font-size: 23px;
+    }
+    .brand-name span { color: var(--blue); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-status {
+      display: flex; align-items: center; gap: 7px; padding: 10px 13px;
+      border-radius: 50px; color: #128363; background: #e9faf3;
+      font-size: 11px; font-weight: 800;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #19bc8a; box-shadow: 0 0 0 4px #19bc8a18;
+    }
+    .back-link {
+      display: flex; align-items: center; gap: 8px; padding: 11px 15px;
+      border: 1px solid var(--border); border-radius: 12px; background: white;
+      color: #344467; font-size: 12px; font-weight: 800; transition: .3s;
+    }
+    .back-link:hover {
+      transform: translateY(-2px); color: var(--blue);
+      border-color: #b9c4ff; box-shadow: 0 8px 24px #5269ef13;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative; width: min(1160px,calc(100% - 48px));
+      min-height: 700px; margin: auto; padding: 85px 0 90px;
+      display: grid; grid-template-columns: 1.05fr .95fr;
+      align-items: center; gap: 50px;
+    }
+    .hero-copy { position: relative; z-index: 2; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; padding: 10px 15px;
+      border: 1px solid #dfe5ff; border-radius: 50px; color: #4f60d9;
+      background: #ffffffb8; font-size: 10px; font-weight: 800;
+      letter-spacing: 1.5px; text-transform: uppercase; animation: fadeUp .8s both;
+    }
+    .sparkle { display: inline-block; font-size: 16px; animation: sparkle 2.5s infinite; }
+    .hero h1 {
+      margin-top: 27px; font-family: "Plus Jakarta Sans",sans-serif;
+      font-size: clamp(42px,5.5vw,72px); font-weight: 800;
+      line-height: 1.09; letter-spacing: -4px; animation: fadeUp .8s .12s both;
+    }
+    .hero h1 .gradient {
+      display: block; padding-bottom: 5px;
+      background: linear-gradient(100deg,#4e63ec,#9360ed,#4e63ec);
+      background-size: 200% auto; background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      animation: gradientFlow 6s linear infinite;
+    }
+    .hero-description {
+      max-width: 485px; margin-top: 23px; color: #75819d;
+      font-size: 15px; line-height: 1.95; animation: fadeUp .8s .24s both;
+    }
+    .hero-actions {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px;
+      animation: fadeUp .8s .36s both;
+    }
+    .btn {
+      display: inline-flex; justify-content: center; align-items: center; gap: 10px;
+      min-height: 49px; padding: 0 20px; border-radius: 14px;
+      font-size: 12px; font-weight: 800;
+      transition: transform .3s,box-shadow .3s,background .3s;
+    }
+    .btn-primary {
+      color: white; background: linear-gradient(110deg,#596af3,#5044d8);
+      box-shadow: 0 10px 25px #5263e733;
+    }
+    .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 15px 30px #5263e747; }
+    .btn-secondary { color: #364567; background: white; border: 1px solid #e1e6f3; }
+    .btn-secondary:hover { transform: translateY(-4px); border-color: #c4cdff; color: var(--blue); }
+    .hero-footnote {
+      display: flex; align-items: center; gap: 9px; margin-top: 25px;
+      color: #8792aa; font-size: 11px; animation: fadeUp .8s .48s both;
+    }
+    .check { color: #10b981; font-size: 17px; }
+
+    /* PROFILE CARD */
+    .visual {
+      position: relative; display: grid; place-items: center;
+      min-height: 510px; perspective: 1200px; animation: fadeIn 1.1s .2s both;
+    }
+    .orbit {
+      position: absolute; width: 420px; height: 420px; max-width: 100%;
+      border: 1px dashed #bdc8ff; border-radius: 50%;
+      animation: orbitRotate 32s linear infinite;
+    }
+    .orbit::before,.orbit::after {
+      content: ""; position: absolute; width: 12px; height: 12px;
+      border-radius: 50%; background: #6d7cff;
+      box-shadow: 0 0 0 7px #6d7cff16,0 0 20px #6d7cff48;
+    }
+    .orbit::before { top: 45px; left: 70px; }
+    .orbit::after {
+      right: 36px; bottom: 105px; background: #b07af5;
+      box-shadow: 0 0 0 7px #b07af516,0 0 20px #b07af548;
+    }
+    .orbit-two {
+      width: 355px; height: 355px; border-color: #d8c9ff;
+      animation-direction: reverse; animation-duration: 24s;
+    }
+    .profile-card {
+      position: relative; z-index: 3; width: min(385px,92%); padding: 29px;
+      border: 1px solid white; border-radius: 28px; background: rgba(255,255,255,.91);
+      box-shadow: 0 28px 80px rgba(56,70,141,.13),0 3px 10px rgba(50,64,128,.04);
+      transform-style: preserve-3d;
+      transition: transform .18s ease-out,box-shadow .3s;
+    }
+    .profile-card::before {
+      content: ""; position: absolute; z-index: -1; inset: -1px;
+      border-radius: inherit;
+      background: linear-gradient(140deg,#fff,#b8c7ff70,#e8ceff90);
+      opacity: .8;
+    }
+    .profile-card-top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; margin-bottom: 27px;
+    }
+    .profile-mini-brand {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 800; color: #485776;
+    }
+    .mini-icon {
+      width: 29px; height: 29px; display: grid; place-items: center;
+      border-radius: 9px; background: #eef1ff; font-size: 16px;
+    }
+    .profile-number {
+      padding: 7px 10px; color: #6975b4; border-radius: 50px;
+      background: #f0f2ff; font-size: 9px; font-weight: 800; letter-spacing: .6px;
+    }
+    .avatar-wrap {
+      position: relative; width: 120px; height: 120px; margin: 0 auto 22px;
+      padding: 4px; border-radius: 34px;
+      background: linear-gradient(140deg,#5b6cf0,#ad7df5,#7bd9ff);
+      box-shadow: 0 12px 35px #6975ee31; transform: translateZ(28px);
+      animation: avatarFloat 4s ease-in-out infinite;
+    }
+    .avatar {
+      width: 100%; height: 100%; display: grid; place-items: center;
+      border: 4px solid white; border-radius: 31px;
+      background: linear-gradient(145deg,#e8edff,#f8f4ff); color: #5665e6;
+      font-family: "Plus Jakarta Sans",sans-serif; font-size: 42px;
+      font-weight: 800; letter-spacing: -3px;
+    }
+    .online-badge {
+      position: absolute; right: -8px; bottom: -5px;
+      display: flex; align-items: center; gap: 6px; padding: 8px 10px;
+      border: 3px solid white; border-radius: 50px; color: #148762;
+      background: #e8fbf2; font-size: 9px; font-weight: 800; white-space: nowrap;
+    }
+    .online-badge span { width: 6px; height: 6px; border-radius: 50%; background: #1fbe8a; }
+    .profile-intro { text-align: center; transform: translateZ(20px); }
+    .small-label {
+      color: #7580a1; font-size: 10px; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .profile-intro h2 {
+      margin-top: 9px; font-family: "Plus Jakarta Sans",sans-serif;
+      font-size: 32px; font-weight: 800; letter-spacing: -1.5px;
+    }
+    .profile-intro h2 span { color: var(--blue); }
+    .profile-intro p { margin-top: 8px; color: #7e89a3; font-size: 12px; line-height: 1.7; }
+    .profile-divider {
+      height: 1px; margin: 23px 0;
+      background: linear-gradient(90deg,transparent,#dfe5f4,transparent);
+    }
+    .profile-details {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      transform: translateZ(15px);
+    }
+    .profile-detail {
+      padding: 13px 11px; border: 1px solid #e9edf8;
+      border-radius: 15px; background: #fafbff; transition: .3s;
+    }
+    .profile-detail:hover {
+      transform: translateY(-4px); border-color: #cbd2ff; background: #f5f5ff;
+    }
+    .detail-icon { margin-bottom: 8px; font-size: 18px; }
+    .detail-label {
+      margin-bottom: 5px; color: #909bb1; font-size: 9px;
+      font-weight: 800; letter-spacing: .8px; text-transform: uppercase;
+    }
+    .detail-value { color: #2c3a5b; font-size: 11px; font-weight: 800; line-height: 1.5; overflow-wrap: anywhere; }
+
+    .floating-chip {
+      position: absolute; z-index: 5; display: flex; align-items: center;
+      gap: 10px; padding: 13px 16px; border: 1px solid white;
+      border-radius: 16px; background: rgba(255,255,255,.94);
+      box-shadow: 0 12px 35px #34467d13; color: #344364;
+      font-size: 11px; font-weight: 800; animation: chipFloat 4s ease-in-out infinite;
+    }
+    .chip-icon {
+      display: grid; place-items: center; width: 31px; height: 31px;
+      border-radius: 10px; background: #eef0ff; font-size: 17px;
+    }
+    .chip-left { top: 115px; left: -2px; }
+    .chip-right { right: -8px; bottom: 95px; animation-delay: -2s; }
+
+    /* JOURNEY */
+    .section { width: min(1160px,calc(100% - 48px)); margin: auto; padding: 75px 0; }
+    .section-heading { max-width: 620px; margin: 0 auto 42px; text-align: center; }
+    .section-tag { color: #5b69e6; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+    .section-heading h2 {
+      margin-top: 13px; font-family: "Plus Jakarta Sans",sans-serif;
+      font-size: clamp(29px,4vw,44px); letter-spacing: -2px; line-height: 1.2;
+    }
+    .section-heading p { margin-top: 13px; color: #7e89a3; font-size: 14px; line-height: 1.9; }
+    .journey-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+    .journey-card {
+      position: relative; overflow: hidden; padding: 29px 25px;
+      border: 1px solid #e8ebf7; border-radius: 22px;
+      background: rgba(255,255,255,.85); box-shadow: 0 10px 35px #334b8707;
+      transition: transform .35s,box-shadow .35s,border-color .35s;
+    }
+    .journey-card::before {
+      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+      transform: scaleX(0); transform-origin: left;
+      background: linear-gradient(90deg,#586cf3,#b18bfa); transition: transform .4s;
+    }
+    .journey-card:hover { transform: translateY(-8px); border-color: #d7ddff; box-shadow: 0 22px 45px #465b9d13; }
+    .journey-card:hover::before { transform: scaleX(1); }
+    .journey-icon {
+      width: 52px; height: 52px; display: grid; place-items: center;
+      margin-bottom: 22px; border: 1px solid #e0e6ff; border-radius: 16px;
+      background: linear-gradient(145deg,#f0f2ff,#faf5ff); font-size: 24px; transition: .35s;
+    }
+    .journey-card:hover .journey-icon { transform: rotate(-7deg) scale(1.08); }
+    .journey-card h3 { font-family: "Plus Jakarta Sans",sans-serif; font-size: 17px; }
+    .journey-card p { margin-top: 12px; color: #7b87a1; font-size: 13px; line-height: 1.9; }
+
+    /* SKILLS */
+    .skills-panel {
+      display: grid; grid-template-columns: .8fr 1.2fr; gap: 45px;
+      align-items: center; padding: 40px; border: 1px solid #e5e9f7;
+      border-radius: 28px; background: linear-gradient(120deg,#fff,#f9f9ff);
+      box-shadow: 0 22px 70px rgba(47,65,128,.09);
+    }
+    .skills-copy h2 {
+      margin-top: 13px; font-family: "Plus Jakarta Sans",sans-serif;
+      font-size: clamp(28px,4vw,40px); letter-spacing: -1.7px; line-height: 1.2;
+    }
+    .skills-copy p { margin-top: 15px; color: #7d88a1; font-size: 13px; line-height: 1.9; }
+    .skills-list { display: flex; flex-wrap: wrap; align-content: center; gap: 12px; }
+    .skill-pill {
+      display: flex; align-items: center; gap: 9px; padding: 13px 15px;
+      border: 1px solid #e6eafa; border-radius: 13px; background: white;
+      color: #465372; font-size: 12px; font-weight: 800;
+      box-shadow: 0 5px 15px #344b8306; transition: .3s;
+    }
+    .skill-pill:hover { transform: translateY(-4px); color: var(--blue); border-color: #cbd3ff; box-shadow: 0 10px 22px #5368ee10; }
+    .skill-pill span { font-size: 17px; }
+
+    /* CLOSING */
+    .closing {
+      width: min(1160px,calc(100% - 48px)); margin: 65px auto 80px;
+      position: relative; overflow: hidden; padding: 66px 25px;
+      border: 1px solid #dfe4ff; border-radius: 30px;
+      background: radial-gradient(ellipse at 15% 120%,#c6d5ff80,transparent 45%),
+                  radial-gradient(ellipse at 90% -20%,#e8cfff90,transparent 45%),white;
+      text-align: center; box-shadow: 0 20px 70px #3e56a20a;
+    }
+    .closing-icon {
+      width: 55px; height: 55px; display: grid; place-items: center;
+      margin: 0 auto 22px; border: 1px solid #e0e5ff; border-radius: 18px;
+      background: white; box-shadow: 0 10px 28px #5369d918;
+      font-size: 25px; animation: avatarFloat 4s ease-in-out infinite;
+    }
+    .closing h2 { font-family: "Plus Jakarta Sans",sans-serif; font-size: clamp(28px,4.5vw,45px); letter-spacing: -2px; }
+    .closing p { max-width: 590px; margin: 15px auto 25px; color: #7b87a2; font-size: 14px; line-height: 1.9; }
+
+    /* LINKEDIN & GMAIL BUTTONS */
+    .social-links {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 14px; margin-top: 25px;
+    }
+    .social-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      min-width: 155px; padding: 14px 18px; border: 1px solid #e1e7f7;
+      border-radius: 15px; background: rgba(255,255,255,.94); color: #334365;
+      font-size: 13px; font-weight: 800;
+      box-shadow: 0 8px 25px rgba(54,70,130,.07);
+      transition: transform .3s,box-shadow .3s,border-color .3s,color .3s;
+    }
+    .social-btn svg { width: 21px; height: 21px; fill: currentColor; flex-shrink: 0; }
+    .social-arrow { color: #8b96b0; transition: transform .3s; }
+    .social-btn:hover {
+      transform: translateY(-4px); box-shadow: 0 14px 30px rgba(79,99,239,.14);
+      border-color: #cbd3ff; color: #4f63ef;
+    }
+    .social-btn:hover .social-arrow { transform: translate(3px,-3px); }
+    .social-note { margin-top: 18px; color: #8a94ac; font-size: 11px; }
+
+    footer {
+      padding: 30px 20px; border-top: 1px solid #e7ebf6;
+      background: #ffffff8a; text-align: center; color: #8590a8;
+      font-size: 11px; line-height: 2;
+    }
+    footer strong { color: #465bd8; }
+
+    /* ANIMATIONS */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .journey-card:nth-child(2) { transition-delay: .1s; }
+    .journey-card:nth-child(3) { transition-delay: .2s; }
+
+    @keyframes fadeUp { from {opacity:0;transform:translateY(24px)} to {opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+    @keyframes gradientFlow { to {background-position:200% center} }
+    @keyframes sparkle { 0%,100% {transform:scale(1) rotate(0)} 50% {transform:scale(1.2) rotate(15deg)} }
+    @keyframes orbitRotate { to {transform:rotate(360deg)} }
+    @keyframes avatarFloat { 0%,100% {transform:translateY(0)} 50% {transform:translateY(-7px)} }
+    @keyframes chipFloat { 0%,100% {transform:translateY(0)} 50% {transform:translateY(-11px)} }
+
+    @media(max-width:950px) {
+      .hero { grid-template-columns: 1fr; gap: 25px; padding-top: 75px; text-align: center; }
+      .hero-copy { display: flex; flex-direction: column; align-items: center; }
+      .hero-description { max-width: 600px; }
+      .visual { width: min(570px,100%); margin: 10px auto 0; }
+      .skills-panel { grid-template-columns: 1fr; gap: 25px; }
+    }
+    @media(max-width:650px) {
+      .navbar { padding: 11px 15px; }
+      .brand { font-size: 18px; }
+      .brand-icon { width: 39px; height: 39px; }
+      .nav-status { display: none; }
+      .back-link { padding: 10px 12px; font-size: 11px; }
+      .hero { width: calc(100% - 34px); padding-top: 60px; padding-bottom: 40px; }
+      .hero h1 { font-size: clamp(40px,10vw,58px); letter-spacing: -2.8px; }
+      .hero-description { font-size: 13px; }
+      .hero-actions { justify-content: center; }
+      .hero-footnote { justify-content: center; line-height: 1.7; }
+      .visual { min-height: 440px; }
+      .orbit { width: 340px; height: 340px; }
+      .orbit-two { width: 285px; height: 285px; }
+      .profile-card { width: min(355px,90%); padding: 22px 17px; border-radius: 24px; }
+      .profile-intro h2 { font-size: 28px; }
+      .chip-left { top: 34px; left: -1px; }
+      .chip-right { right: -2px; bottom: 25px; }
+      .floating-chip { padding: 9px 11px; font-size: 10px; }
+      .chip-icon { width: 26px; height: 26px; font-size: 14px; }
+      .section { width: calc(100% - 34px); padding: 55px 0; }
+      .section-heading { margin-bottom: 27px; }
+      .journey-grid { grid-template-columns: 1fr; gap: 13px; }
+      .journey-card { padding: 24px 21px; }
+      .skills-panel { padding: 25px 20px; border-radius: 22px; }
+      .skills-list { gap: 9px; }
+      .skill-pill { padding: 11px 12px; font-size: 11px; }
+      .closing { width: calc(100% - 34px); margin: 35px auto 55px; padding: 47px 19px; border-radius: 24px; }
+      .closing h2 { letter-spacing: -1px; }
+      .social-links { gap: 10px; }
+      .social-btn { min-width: 140px; padding: 12px 14px; }
+    }
+    @media(max-width:360px) {
+      .profile-details { gap: 7px; }
+      .profile-detail { padding: 11px 8px; }
+      .detail-value { font-size: 10px; }
+      .profile-number { font-size: 8px; }
+      .visual { min-height: 410px; }
+      .orbit { width: 290px; height: 290px; }
+      .orbit-two { width: 250px; height: 250px; }
+      .social-btn { min-width: 125px; font-size: 12px; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; transition-duration:.01ms!important; }
+      .reveal { opacity:1; transform:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-glow glow-one"></div>
+  <div class="page-glow glow-two"></div>
+  <div class="page-glow glow-three"></div>
+
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="./index.html" class="brand">
+        <div class="brand-icon">🚌</div>
+        <div class="brand-name">Bus<span>Track</span></div>
+      </a>
+      <div class="nav-right">
+        <div class="nav-status"><span class="status-dot"></span> SMART TRANSIT</div>
+        <a href="./index.html" class="back-link"><span>←</span> Home</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="sparkle">✦</span> Smart campus transportation</div>
+        <h1>The mind behind <span class="gradient">BusTrack.</span></h1>
+        <p class="hero-description">
+          Great experiences begin with thoughtful ideas. Meet the student
+          developer behind BusTrack, bringing technology and design together
+          to make campus transportation smarter, simpler and more connected.
+        </p>
+        <div class="hero-actions">
+          <a href="#developer" class="btn btn-primary">Meet the Developer <span>↗</span></a>
+          <a href="#journey" class="btn btn-secondary">Explore My Journey</a>
+        </div>
+        <div class="hero-footnote"><span class="check">✓</span> Designed with curiosity. Built with purpose.</div>
+      </div>
+
+      <div class="visual" id="developer">
+        <div class="orbit"></div>
+        <div class="orbit orbit-two"></div>
+
+        <div class="floating-chip chip-left">
+          <div class="chip-icon">🎓</div>
+          <div>SRM IST<br><span style="color:#8a94ab;font-size:9px">Ramapuram Campus</span></div>
+        </div>
+        <div class="floating-chip chip-right">
+          <div class="chip-icon">💻</div>
+          <div>Computer Science<br><span style="color:#8a94ab;font-size:9px">Engineering · Core</span></div>
+        </div>
+
+        <article class="profile-card" id="profileCard">
+          <div class="profile-card-top">
+            <div class="profile-mini-brand"><div class="mini-icon">🚌</div> BusTrack Developer</div>
+            <div class="profile-number">PROFILE 001</div>
+          </div>
+          <div class="avatar-wrap">
+            <div class="avatar">RG</div>
+            <div class="online-badge"><span></span> STUDENT DEVELOPER</div>
+          </div>
+          <div class="profile-intro">
+            <div class="small-label">Designed &amp; Developed by</div>
+            <h2>Rupak <span>Ganesh</span></h2>
+            <p>Computer Science Engineering Student</p>
+          </div>
+          <div class="profile-divider"></div>
+          <div class="profile-details">
+            <div class="profile-detail"><div class="detail-icon">🎓</div><div class="detail-label">Institution</div><div class="detail-value">SRM IST</div></div>
+            <div class="profile-detail"><div class="detail-icon">📍</div><div class="detail-label">Campus</div><div class="detail-value">Ramapuram, Chennai</div></div>
+            <div class="profile-detail"><div class="detail-icon">💻</div><div class="detail-label">Department</div><div class="detail-value">CSE — Core</div></div>
+            <div class="profile-detail"><div class="detail-icon">🚀</div><div class="detail-label">Building</div><div class="detail-value">BusTrack</div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="journey">
+      <div class="section-heading reveal">
+        <div class="section-tag">A little about my approach</div>
+        <h2>Technology with a human touch.</h2>
+        <p>Building digital experiences that combine useful functionality, thoughtful design and a smooth user experience.</p>
+      </div>
+      <div class="journey-grid">
+        <article class="journey-card reveal">
+          <div class="journey-icon">💡</div>
+          <h3>Ideas into reality</h3>
+          <p>Turning real-world problems into practical web applications with a focus on simplicity, accessibility and usefulness.</p>
+        </article>
+        <article class="journey-card reveal">
+          <div class="journey-icon">🎨</div>
+          <h3>Design that feels right</h3>
+          <p>Exploring modern interfaces, elegant layouts, responsive experiences and interactions that feel natural.</p>
+        </article>
+        <article class="journey-card reveal">
+          <div class="journey-icon">⚡</div>
+          <h3>Always evolving</h3>
+          <p>Learning through experimentation, improving technical skills and discovering better ways to build.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="skills-panel reveal">
+        <div class="skills-copy">
+          <div class="section-tag">Tools &amp; interests</div>
+          <h2>Learning. Building. Improving.</h2>
+          <p>My journey in computer science is about exploring ideas, developing practical skills and continuously improving the way I design and build digital products.</p>
+        </div>
+        <div class="skills-list">
+          <div class="skill-pill"><span>🌐</span> Web Development</div>
+          <div class="skill-pill"><span>🎨</span> UI / UX Design</div>
+          <div class="skill-pill"><span>⚡</span> JavaScript</div>
+          <div class="skill-pill"><span>🗄️</span> Supabase</div>
+          <div class="skill-pill"><span>🧩</span> Problem Solving</div>
+          <div class="skill-pill"><span>📱</span> Responsive Design</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing reveal">
+      <div class="closing-icon">🚌</div>
+      <h2>Every journey starts with an idea.</h2>
+      <p>BusTrack is a step in a continuous journey of learning, creativity and building useful technology. Thanks for being part of the journey.</p>
+      <a href="./index.html" class="btn btn-primary">Return to BusTrack <span>→</span></a>
+
+      <div class="social-links">
+        <!-- YOUR-LINKEDIN-USERNAME-ai unga LinkedIn profile username-oda replace pannunga -->
+        <a href="https://www.linkedin.com/in/rupak-ganesh-b15878360/"
+           class="social-btn" target="_blank" rel="noopener noreferrer"
+           aria-label="Visit my LinkedIn profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM8.3 18H5.7V9.6h2.6ZM7 8.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3ZM18.3 18h-2.6v-4.1c0-1 0-2.2-1.3-2.2s-1.5 1-1.5 2.1V18h-2.6V9.6h2.5v1.1h.1a2.8 2.8 0 0 1 2.5-1.4c2.7 0 3.2 1.8 3.2 4.1Z"/>
+          </svg>
+          <span>LinkedIn</span>
+          <span class="social-arrow">↗</span>
+        </a>
+
+        
+        <a href="href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=YOUR-EMAIL@gmail.com"
+           class="social-btn" target="_blank" rel="noopener noreferrer"
+           aria-label="Send me an email">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Zm2 .1v.2l7 5.1 7-5.1v-.2a.5.5 0 0 0-.5-.5h-13a.5.5 0 0 0-.5.5Zm14 2.7-6.4 4.7a1 1 0 0 1-1.2 0L5 9.3v8.2a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5Z"/>
+          </svg>
+          <span>Gmail</span>
+          <span class="social-arrow">↗</span>
+        </a>
+      </div>
+      <div class="social-note">Let’s connect and build something meaningful.</div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>BusTrack</strong> · Smart Campus Transportation<br>
+    Designed &amp; Developed by Rupak Ganesh · SRM IST Ramapuram
+  </footer>
+
+  <script>
+    // Scroll reveal animations
+    (() => {
+      const elements = document.querySelectorAll(".reveal");
+
+      if (!("IntersectionObserver" in window)) {
+        elements.forEach(el => el.classList.add("visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      elements.forEach(el => observer.observe(el));
+    })();
+
+    // 3D card tilt for mouse / trackpad
+    (() => {
+      const card = document.getElementById("profileCard");
+
+      if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        return;
+      }
+
+      card.addEventListener("pointermove", event => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+
+        const rotateY = (x - 0.5) * 7;
+        const rotateX = (0.5 - y) * 7;
+
+        card.style.transform =
+          `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
+        card.style.boxShadow = "0 35px 85px rgba(47,65,128,.16)";
+      });
+
+      card.addEventListener("pointerleave", () => {
+        card.style.transform = "rotateX(0) rotateY(0)";
+        card.style.boxShadow = "";
+      });
+    })();
+  </script>
+</body>
+</html>
