@@ -1,0 +1,710 @@
+/* ==========================================
+   STUDENT DASHBOARD
+========================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #f6f8fb;
+    color: #172033;
+    font-family: Arial, sans-serif;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.dashboard-header {
+    height: 74px;
+    padding: 0 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(255, 255, 255, 0.86);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border-bottom: 1px solid #e8ebf0;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bus-logo {
+    width: 46px;
+    height: 46px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef4ff;
+
+    font-size: 23px;
+}
+
+.brand-info h1 {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.brand-info span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8a93a3;
+
+    font-size: 11px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* ==========================================
+   HEADER BUTTONS
+========================================== */
+
+.notification-btn,
+.profile-btn {
+    border: 1px solid #e3e7ee;
+
+    background: rgba(255, 255, 255, 0.85);
+
+    cursor: pointer;
+}
+
+.notification-btn {
+    width: 43px;
+    height: 43px;
+
+    border-radius: 14px;
+
+    position: relative;
+
+    font-size: 18px;
+}
+
+.notification-btn span {
+    position: absolute;
+
+    top: -5px;
+    right: -5px;
+
+    min-width: 18px;
+    height: 18px;
+
+    padding: 0 4px;
+
+    border-radius: 50px;
+
+    background: #1d2d4f;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.profile-btn {
+    width: 43px;
+    height: 43px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-btn span {
+    width: 31px;
+    height: 31px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eaf0fa;
+    color: #344c75;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   MAIN
+========================================== */
+
+.dashboard-container {
+    width: 100%;
+    max-width: 1050px;
+
+    margin: 0 auto;
+
+    padding: 35px 25px 120px;
+}
+
+
+/* ==========================================
+   WELCOME
+========================================== */
+
+.welcome-section {
+    margin-bottom: 25px;
+}
+
+.small-label {
+    margin: 0 0 8px;
+
+    color: #7890b5;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+}
+
+.welcome-section h2 {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 31px;
+    line-height: 1.2;
+}
+
+.welcome-text {
+    margin: 9px 0 0;
+
+    color: #7b8495;
+
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   LIVE CARD
+========================================== */
+
+.live-card {
+    padding: 28px;
+
+    border: 1px solid #e3e8f0;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f1f5fc
+        );
+
+    box-shadow:
+        0 18px 45px rgba(30, 45, 70, 0.08);
+}
+
+.live-card-top {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.live-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #2d7a4a;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #39a562;
+}
+
+.live-card h3 {
+    margin: 9px 0 5px;
+
+    color: #172033;
+
+    font-size: 22px;
+}
+
+.live-card p {
+    margin: 0;
+
+    color: #7d8798;
+
+    font-size: 13px;
+}
+
+.bus-emoji {
+    width: 57px;
+    height: 57px;
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef4ff;
+
+    font-size: 27px;
+}
+
+
+/* ==========================================
+   LIVE INFO
+========================================== */
+
+.live-info {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin: 26px 0;
+}
+
+.info-item {
+    padding: 16px;
+
+    border: 1px solid #e7ebf1;
+
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.info-item span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #8b94a4;
+
+    font-size: 11px;
+}
+
+.info-item strong {
+    color: #263248;
+
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   PRIMARY BUTTON
+========================================== */
+
+.primary-btn {
+    width: 100%;
+    height: 51px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background: #1d2d4f;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 25px rgba(29, 45, 79, 0.20);
+}
+
+
+/* ==========================================
+   QUICK ACCESS
+========================================== */
+
+.section {
+    margin-top: 35px;
+}
+
+.section-heading h3 {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 21px;
+}
+
+.quick-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-top: 18px;
+}
+
+.quick-card {
+    min-height: 95px;
+
+    padding: 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    text-align: left;
+
+    border: 1px solid #e4e9f0;
+
+    border-radius: 19px;
+
+    background: rgba(255, 255, 255, 0.82);
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.quick-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(30, 45, 70, 0.08);
+}
+
+.quick-icon {
+    width: 45px;
+    height: 45px;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f0f4fa;
+
+    font-size: 20px;
+}
+
+.quick-card strong {
+    display: block;
+
+    color: #263248;
+
+    font-size: 13px;
+}
+
+.quick-card span {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #8b94a4;
+
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   NEXT STOP
+========================================== */
+
+.next-stop-card,
+.notification-card {
+    margin-top: 25px;
+
+    padding: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    border: 1px solid #e5e9ef;
+
+    border-radius: 21px;
+
+    background: white;
+
+    box-shadow:
+        0 8px 25px rgba(30, 45, 70, 0.04);
+}
+
+.next-stop-icon,
+.notification-icon {
+    width: 51px;
+    height: 51px;
+
+    flex-shrink: 0;
+
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef4ff;
+
+    font-size: 22px;
+}
+
+.next-stop-content span,
+.notification-content span {
+    color: #8b94a4;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.next-stop-content h3,
+.notification-content h3 {
+    margin: 6px 0 5px;
+
+    color: #263248;
+
+    font-size: 16px;
+}
+
+.next-stop-content p,
+.notification-content p {
+    margin: 0;
+
+    color: #87909f;
+
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   BOTTOM NAVIGATION
+========================================== */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 50%;
+    bottom: 18px;
+
+    transform: translateX(-50%);
+
+    width: min(
+        calc(100% - 30px),
+        520px
+    );
+
+    height: 67px;
+
+    padding: 7px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 4px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.90
+    );
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    border: 1px solid #e3e7ee;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 15px 45px rgba(
+            30,
+            45,
+            70,
+            0.15
+        );
+
+    z-index: 200;
+}
+
+.nav-item {
+    border: none;
+
+    background: transparent;
+
+    border-radius: 16px;
+
+    color: #8a93a3;
+
+    cursor: pointer;
+}
+
+.nav-item span {
+    display: block;
+
+    font-size: 18px;
+}
+
+.nav-item small {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 10px;
+}
+
+.nav-item.active {
+    background: #eef3fb;
+
+    color: #304b77;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 800px) {
+
+    .quick-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .dashboard-header {
+        height: 68px;
+
+        padding: 0 16px;
+    }
+
+    .dashboard-container {
+        padding: 25px 16px 110px;
+    }
+
+    .welcome-section h2 {
+        font-size: 27px;
+    }
+
+    .live-card {
+        padding: 21px;
+    }
+
+    .live-info {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .live-info .info-item:last-child {
+        grid-column: span 2;
+    }
+
+}
+
+@media (max-width: 430px) {
+
+    .brand-info h1 {
+        font-size: 16px;
+    }
+
+    .brand-info span {
+        font-size: 10px;
+    }
+
+    .welcome-section h2 {
+        font-size: 25px;
+    }
+
+    .quick-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .live-info {
+        grid-template-columns: 1fr;
+    }
+
+    .live-info .info-item:last-child {
+        grid-column: auto;
+    }
+
+    .bottom-nav {
+        bottom: 12px;
+
+        width: calc(100% - 22px);
+    }
+
+}

@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop Management | BusTrack</title>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/glass.css">
+    <link rel="stylesheet" href="../css/admin/admin.css">
+    <link rel="stylesheet" href="../css/admin/tables.css">
+    <link rel="stylesheet" href="../css/admin/forms.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+        #stopMap {
+            width: 100%;
+            height: 400px;
+            min-height: 400px;
+            background: #e5e7eb;
+            border: 1px solid #dbe3ef;
+            border-radius: 16px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .map-picker-card {
+            margin-top: 24px;
+            padding: 20px;
+            border: 1px solid #dbe3ef;
+            border-radius: 18px;
+            background: #f8fafc;
+        }
+
+        .map-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .map-picker-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #17233b;
+        }
+
+        .map-picker-description,
+        .route-help {
+            margin-top: 6px;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .map-coordinates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-top: 12px;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #fff;
+            color: #64748b;
+        }
+
+        .map-coordinates strong {
+            color: #234477;
+        }
+
+        .gps-status {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: #eef6ff;
+            color: #31558f;
+        }
+
+        .gps-status.show {
+            display: block;
+        }
+
+        .route-order-info {
+            margin-top: 14px;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .route-order-info strong {
+            color: #234477;
+        }
+
+        @media (max-width: 768px) {
+            #stopMap {
+                height: 320px;
+                min-height: 320px;
+            }
+
+            .map-picker-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .map-coordinates {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <div class="admin-logo">🚌</div>
+            <div>
+                <h1>BusTrack</h1>
+                <span>Admin Portal</span>
+            </div>
+        </div>
+
+        <div class="admin-header-right">
+            <span class="admin-status">● Admin</span>
+            <button class="admin-profile-btn" onclick="logoutAdmin()">A</button>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        <section class="admin-page-title">
+            <div>
+                <p class="small-label">STOP MANAGEMENT</p>
+                <h2>Bus Stops</h2>
+                <p>Create and manage GPS bus stops.</p>
+            </div>
+
+            <button class="primary-btn" onclick="openAddStopForm()">
+                + Add Stop
+            </button>
+        </section>
+
+        <section class="admin-stats">
+            <div class="stat-card">
+                <span>Total Stops</span>
+                <strong id="totalStops">0</strong>
+            </div>
+            <div class="stat-card">
+                <span>Notification Radius</span>
+                <strong id="defaultRadius">100m</strong>
+            </div>
+            <div class="stat-card">
+                <span>GPS Stops</span>
+                <strong id="gpsStops">0</strong>
+            </div>
+            <div class="stat-card">
+                <span>Status</span>
+                <strong>Active</strong>
+            </div>
+        </section>
+
+        <section id="stopFormSection"
+                 class="admin-form-card"
+                 style="display:none;">
+
+            <div class="form-header">
+                <div>
+                    <p class="small-label">STOP DETAILS</p>
+                    <h3 id="stopFormTitle">Add New Stop</h3>
+                </div>
+
+                <button type="button"
+                        class="close-btn"
+                        onclick="closeStopForm()">×</button>
+            </div>
+
+            <form id="stopForm" onsubmit="saveStop(event)">
+                <input type="hidden" id="stopId">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="stopName">Stop Name</label>
+                        <input type="text"
+                               id="stopName"
+                               placeholder="Example: Avadi"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="latitude">Latitude</label>
+                        <input type="number"
+                               id="latitude"
+                               step="any"
+                               min="-90"
+                               max="90"
+                               placeholder="13.1143"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="longitude">Longitude</label>
+                        <input type="number"
+                               id="longitude"
+                               step="any"
+                               min="-180"
+                               max="180"
+                               placeholder="80.1098"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notificationRadius">Notification Radius</label>
+                        <input type="number"
+                               id="notificationRadius"
+                               min="10"
+                               max="1000"
+                               value="100"
+                               required>
+                        <small>Distance in meters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="routeId">Route</label>
+                        <select id="routeId" required>
+                            <option value="">Select Route</option>
+                        </select>
+                        <div class="route-help">
+                            Indha stop entha route-ku belong aagum.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stopOrder">Stop Order</label>
+                        <input type="number"
+                               id="stopOrder"
+                               min="1"
+                               value="1"
+                               required>
+                        <div class="route-help">
+                            Route-la bus travel panna order.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="route-order-info">
+                    💡 Example:
+                    <strong>Avadi = 1</strong> →
+                    <strong>Ajey stadium = 2</strong> →
+                    <strong>bharathi nagar = 3</strong>
+                </div>
+
+                <div class="map-picker-card">
+                    <div class="map-picker-header">
+                        <div>
+                            <div class="map-picker-title">
+                                📍 Select Stop Location
+                            </div>
+                            <div class="map-picker-description">
+                                Map-la bus stop location click pannunga.
+                                Latitude, longitude automatic-ah fill aagum.
+                            </div>
+                        </div>
+
+                        <button type="button"
+                                class="secondary-btn"
+                                onclick="useCurrentLocation()">
+                            📍 Use My Location
+                        </button>
+                    </div>
+
+                    <div id="stopMap"></div>
+
+                    <div class="map-coordinates">
+                        <div>
+                            Latitude:
+                            <strong id="mapLatitude">-</strong>
+                        </div>
+                        <div>
+                            Longitude:
+                            <strong id="mapLongitude">-</strong>
+                        </div>
+                    </div>
+
+                    <div id="gpsStatus" class="gps-status"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button"
+                            class="secondary-btn"
+                            onclick="closeStopForm()">Cancel</button>
+
+                    <button type="submit" class="primary-btn">
+                        Save Stop
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="admin-table-card">
+            <div class="table-header">
+                <div>
+                    <p class="small-label">ALL STOPS</p>
+                    <h3>Stop List</h3>
+                </div>
+
+                <input type="search"
+                       id="stopSearch"
+                       placeholder="Search stops..."
+                       oninput="filterStops()">
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stop</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Radius</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="stopTableBody">
+                        <tr>
+                            <td colspan="5" class="empty-table">
+                                Loading stops...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Load libraries before project scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../js/config/supabase.js"></script>
+    <script src="../js/admin/stops.js"></script>
+
+    <script>
+        let stopMap = null;
+        let stopMarker = null;
+
+        const DEFAULT_LAT = 13.0827;
+        const DEFAULT_LNG = 80.2707;
+
+        function initializeStopMap() {
+            const mapElement = document.getElementById("stopMap");
+
+            if (!mapElement) {
+                console.error("Missing #stopMap element.");
+                return;
+            }
+
+            if (typeof L === "undefined") {
+                console.error("Leaflet is not loaded.");
+                return;
+            }
+
+            // Form visible aagura varaikkum wait pannu.
+            if (
+                mapElement.offsetWidth === 0 ||
+                mapElement.offsetHeight === 0
+            ) {
+                console.log("Map container is hidden; waiting to initialize.");
+                return;
+            }
+
+            try {
+                
+if (stopMap) {
+    stopMap.invalidateSize(true);
+    return;
+}
+
+const existingMap = document.getElementById("stopMap");
+
+if (existingMap && existingMap._leaflet_id) {
+    console.warn("Map already initialized.");
+    return;
+}
+
+                if (!stopMap) {
+                    // Initialize directly using the element ID.
+                    stopMap = L.map("stopMap").setView(
+                        [DEFAULT_LAT, DEFAULT_LNG],
+                        11
+                    );
+
+                    L.tileLayer(
+                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        {
+                            maxZoom: 19,
+                            attribution: "&copy; OpenStreetMap contributors"
+                        }
+                    ).addTo(stopMap);
+
+                    stopMap.on("click", function (event) {
+                        setStopLocation(
+                            event.latlng.lat,
+                            event.latlng.lng
+                        );
+                    });
+
+                    stopMap.on("tileerror", function (event) {
+                        console.warn("Map tile failed to load:", event);
+                    });
+
+                    console.log("Stop map initialized successfully.");
+                }
+
+                // Important after a hidden form becomes visible.
+                setTimeout(function () {
+                    if (stopMap) {
+                        stopMap.invalidateSize(true);
+                    }
+                }, 300);
+
+            } catch (error) {
+                console.error("Stop map initialization failed:", error);
+                stopMap = null;
+            }
+        }
+
+        function setStopLocation(latitude, longitude) {
+            const lat = Number(latitude);
+            const lng = Number(longitude);
+
+            if (
+                !Number.isFinite(lat) ||
+                !Number.isFinite(lng) ||
+                lat < -90 || lat > 90 ||
+                lng < -180 || lng > 180
+            ) {
+                alert("Invalid GPS coordinates.");
+                return;
+            }
+
+            document.getElementById("latitude").value = lat.toFixed(6);
+            document.getElementById("longitude").value = lng.toFixed(6);
+            document.getElementById("mapLatitude").textContent = lat.toFixed(6);
+            document.getElementById("mapLongitude").textContent = lng.toFixed(6);
+
+            if (!stopMap) {
+                initializeStopMap();
+            }
+
+            if (!stopMap) {
+                console.error("Map is not initialized yet.");
+                return;
+            }
+
+            if (stopMarker) {
+                stopMap.removeLayer(stopMarker);
+            }
+
+            stopMarker = L.marker([lat, lng]).addTo(stopMap);
+
+            stopMarker.bindPopup(
+                "Selected Stop<br>" +
+                lat.toFixed(6) + ", " + lng.toFixed(6)
+            ).openPopup();
+
+            stopMap.setView([lat, lng], 17);
+        }
+
+        function useCurrentLocation() {
+            const status = document.getElementById("gpsStatus");
+
+            if (!navigator.geolocation) {
+                alert("Your browser does not support GPS location.");
+                return;
+            }
+
+            status.textContent = "Getting your current location...";
+            status.classList.add("show");
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    setStopLocation(
+                        position.coords.latitude,
+                        position.coords.longitude
+                    );
+
+                    status.textContent = "Current location selected.";
+                },
+                function (error) {
+                    status.textContent =
+                        "Unable to get location. Select the map manually.";
+
+                    console.error("GPS error:", error);
+
+                    alert(
+                        "Unable to get your location: " + error.message +
+                        "\nYou can click the map to choose the stop."
+                    );
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        // Wait until the existing stops.js opens the form.
+        const originalOpenAddStopForm = window.openAddStopForm;
+
+        if (typeof originalOpenAddStopForm === "function") {
+            window.openAddStopForm = function (...args) {
+                originalOpenAddStopForm.apply(this, args);
+
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(initializeStopMap);
+                });
+            };
+        }
+
+        // Keep the existing close function and clean up the map marker.
+        const originalCloseStopForm = window.closeStopForm;
+
+        if (typeof originalCloseStopForm === "function") {
+            window.closeStopForm = function (...args) {
+                originalCloseStopForm.apply(this, args);
+
+                if (stopMarker && stopMap) {
+                    stopMap.removeLayer(stopMarker);
+                    stopMarker = null;
+                }
+
+                document.getElementById("mapLatitude").textContent = "-";
+                document.getElementById("mapLongitude").textContent = "-";
+                document.getElementById("gpsStatus").classList.remove("show");
+            };
+        }
+
+        // Recheck if the form becomes visible after page load.
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("stopFormSection");
+
+            if (form && getComputedStyle(form).display !== "none") {
+                initializeStopMap();
+            }
+        });
+    </script>
+</body>
+</html>

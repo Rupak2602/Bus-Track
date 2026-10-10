@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Live Tracking | BusTrack</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #f5f8fc;
+            color: #10233f;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .topbar {
+            max-width: 1400px;
+            margin: auto;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(18px);
+
+            border: 1px solid #dce6f2;
+            border-radius: 20px;
+
+            padding: 16px 22px;
+
+            box-shadow:
+                0 10px 35px rgba(20,50,90,0.08);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eaf3ff;
+
+            font-size: 23px;
+        }
+
+        .brand h1 {
+            font-size: 20px;
+        }
+
+        .brand p {
+            color: #71809a;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .back-btn {
+            border: none;
+            background: #edf4fc;
+
+            color: #183b63;
+
+            padding: 11px 16px;
+            border-radius: 12px;
+
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .content {
+            max-width: 1400px;
+            margin: 20px auto 0;
+
+            display: grid;
+            grid-template-columns: 350px 1fr;
+
+            gap: 20px;
+        }
+
+        .panel {
+            background: rgba(255,255,255,0.92);
+
+            border: 1px solid #dce6f2;
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 10px 35px rgba(20,50,90,0.07);
+
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid #e6edf5;
+        }
+
+        .panel-header h2 {
+            font-size: 18px;
+        }
+
+        .panel-header p {
+            color: #7a899e;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .bus-list {
+            padding: 12px;
+            max-height: 620px;
+            overflow-y: auto;
+        }
+
+        .bus-card {
+            padding: 16px;
+
+            border: 1px solid #e1e9f3;
+
+            border-radius: 16px;
+
+            margin-bottom: 10px;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+            background: white;
+        }
+
+        .bus-card:hover {
+            transform: translateY(-2px);
+            border-color: #9fc5ef;
+        }
+
+        .bus-card.active {
+            border-color: #4f9cf9;
+            background: #f1f7ff;
+        }
+
+        .bus-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bus-number {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .live-badge {
+            font-size: 11px;
+            font-weight: 700;
+
+            color: #14804a;
+            background: #e4f8ed;
+
+            padding: 5px 9px;
+
+            border-radius: 30px;
+        }
+
+        .route-name {
+            margin-top: 8px;
+
+            color: #51647d;
+
+            font-size: 13px;
+        }
+
+        .bus-status {
+            margin-top: 10px;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: #7a899e;
+
+            font-size: 12px;
+        }
+
+        .map-panel {
+            min-height: 680px;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 680px;
+        }
+
+        .map-overlay {
+            position: absolute;
+
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+
+            z-index: 1000;
+
+            background: rgba(255,255,255,0.94);
+            backdrop-filter: blur(18px);
+
+            border: 1px solid #dce6f2;
+
+            border-radius: 18px;
+
+            padding: 17px 20px;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.12);
+        }
+
+        .overlay-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .selected-bus {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .connection {
+            color: #14804a;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .route-display {
+            color: #687991;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        .location-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+
+            margin-top: 15px;
+        }
+
+        .location-box {
+            background: #f5f8fc;
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .location-box span {
+            display: block;
+            color: #8290a3;
+            font-size: 11px;
+        }
+
+        .location-box strong {
+            display: block;
+            margin-top: 3px;
+            font-size: 13px;
+        }
+
+        .empty {
+            padding: 35px 20px;
+            text-align: center;
+            color: #7c8ba0;
+        }
+
+        @media (max-width: 900px) {
+
+            .page {
+                padding: 10px;
+            }
+
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .bus-list {
+                max-height: none;
+            }
+
+            #map {
+                height: 520px;
+            }
+
+            .map-panel {
+                min-height: 520px;
+            }
+
+            .location-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🚌
+            </div>
+
+            <div>
+                <h1>Live Bus Tracking</h1>
+                <p>Track your college bus in real time</p>
+            </div>
+
+        </div>
+
+        <button
+            class="back-btn"
+            onclick="goDashboard()"
+        >
+            ← Dashboard
+        </button>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <main class="content">
+
+        <!-- BUS LIST -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <h2>Live Buses</h2>
+
+                <p>
+                    Select a bus to view its live location
+                </p>
+
+            </div>
+
+            <div
+                id="busList"
+                class="bus-list"
+            >
+
+                <div class="empty">
+                    Loading buses...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MAP -->
+
+        <section class="panel map-panel">
+
+            <div id="map"></div>
+
+
+            <div class="map-overlay">
+
+                <div class="overlay-top">
+
+                    <div>
+
+                        <div
+                            id="selectedBus"
+                            class="selected-bus"
+                        >
+                            Select a bus
+                        </div>
+
+                        <div
+                            id="selectedRoute"
+                            class="route-display"
+                        >
+                            No bus selected
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="connectionStatus"
+                        class="connection"
+                    >
+                        ● Waiting
+                    </div>
+
+                </div>
+
+
+                <div class="location-row">
+
+                    <div class="location-box">
+
+                        <span>Latitude</span>
+
+                        <strong id="liveLatitude">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="location-box">
+
+                        <span>Longitude</span>
+
+                        <strong id="liveLongitude">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="location-box">
+
+                        <span>Speed</span>
+
+                        <strong id="liveSpeed">
+                            -- km/h
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/config/supabase.js"></script>
+
+
+<!-- Leaflet -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<!-- Student Tracking JS -->
+
+<script src="../js/student/tracking.js"></script>
+
+</body>
+</html>

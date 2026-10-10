@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Route Stops | BusTrack</title>
+
+    <link rel="stylesheet" href="../css/admin/admin.css">
+    <link rel="stylesheet" href="../css/admin/forms.css">
+    <link rel="stylesheet" href="../css/admin/tables.css">
+
+    <style>
+        .route-stop-page {
+            padding: 40px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+
+        .page-title p {
+            margin-top: 8px;
+            color: #718096;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(210, 220, 235, 0.8);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 12px 35px rgba(30, 50, 80, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .route-select-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 15px;
+            border: 1px solid #dbe3ef;
+            border-radius: 12px;
+            background: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #31558f;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #234477;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #19355e;
+        }
+
+        .btn-danger {
+            background: #fff0f0;
+            color: #c62828;
+        }
+
+        .btn-secondary {
+            background: #edf2f7;
+            color: #334155;
+        }
+
+        .add-stop-grid {
+            display: grid;
+            grid-template-columns: 1fr 160px auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .stop-list {
+            margin-top: 20px;
+        }
+
+        .stop-item {
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+        }
+
+        .stop-order {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #edf4ff;
+            color: #234477;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .stop-name {
+            font-weight: 650;
+            color: #17233b;
+        }
+
+        .stop-coordinates {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px;
+            color: #718096;
+        }
+
+        .selected-route {
+            font-size: 20px;
+            font-weight: 700;
+            color: #17233b;
+        }
+
+        .selected-route span {
+            color: #31558f;
+        }
+
+        @media (max-width: 768px) {
+            .route-stop-page {
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .route-select-row,
+            .add-stop-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stop-item {
+                grid-template-columns: 45px 1fr auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="route-stop-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+
+        <div class="page-title">
+            <div class="section-label">ROUTE MANAGEMENT</div>
+            <h1>Route Stops</h1>
+            <p>Assign and arrange stops for each bus route.</p>
+        </div>
+
+        <button class="btn btn-secondary" onclick="goBackToRoutes()">
+            ← Back to Routes
+        </button>
+
+    </div>
+
+
+    <!-- SELECT ROUTE -->
+    <div class="glass-card">
+
+        <h2>Select Route</h2>
+
+        <div class="route-select-row">
+
+            <div class="form-group">
+
+                <label for="routeSelect">
+                    Route
+                </label>
+
+                <select id="routeSelect" onchange="loadRouteStops()">
+                    <option value="">
+                        Select a route
+                    </option>
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CURRENT ROUTE -->
+    <div class="glass-card">
+
+        <div class="selected-route">
+            Selected Route:
+            <span id="selectedRouteName">
+                None
+            </span>
+        </div>
+
+    </div>
+
+
+    <!-- ADD STOP -->
+    <div class="glass-card">
+
+        <h2>Add Stop</h2>
+
+        <p style="color:#718096;">
+            Select a stop and give its order in the route.
+        </p>
+
+        <div class="add-stop-grid">
+
+            <div class="form-group">
+
+                <label for="stopSelect">
+                    Stop
+                </label>
+
+                <select id="stopSelect">
+                    <option value="">
+                        Select a stop
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="stopOrder">
+                    Stop Order
+                </label>
+
+                <input
+                    type="number"
+                    id="stopOrder"
+                    min="1"
+                    placeholder="1"
+                >
+
+            </div>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="addStopToRoute()"
+            >
+                + Add Stop
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ROUTE STOP LIST -->
+    <div class="glass-card">
+
+        <h2>Route Stop Order</h2>
+
+        <p style="color:#718096;">
+            Stops will appear in travelling order.
+        </p>
+
+        <div id="routeStopsList" class="stop-list">
+
+            <div class="empty-state">
+                Select a route to view its stops.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/config/supabase.js"></script>
+
+<script src="../js/admin/route-stops.js"></script>
+
+</body>
+</html>

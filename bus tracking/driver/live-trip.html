@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Live Trip | BusTrack</title>
+
+
+    <!-- Global CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/global.css"
+    >
+
+    <!-- Glass CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/glass.css"
+    >
+
+    <!-- Driver CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/driver/driver.css"
+    >
+
+    <!-- Trip CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/driver/trip.css"
+    >
+
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+
+    <style>
+
+        body {
+            margin: 0;
+            background: #f4f7fb;
+            color: #17243f;
+            font-family: Arial, sans-serif;
+        }
+
+        .live-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 35px 24px 100px;
+        }
+
+        .live-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .live-header h1 {
+            margin: 5px 0;
+            font-size: 34px;
+        }
+
+        .live-header p {
+            margin: 0;
+            color: #71809d;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #eaf8ef;
+            color: #168044;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        .live-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #20a45a;
+        }
+
+        .trip-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid #dce5f2;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(30, 60, 100, 0.06);
+        }
+
+        .info-card span {
+            display: block;
+            color: #7b8ba7;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .info-card strong {
+            font-size: 18px;
+        }
+
+        .map-card {
+            background: white;
+            border: 1px solid #dce5f2;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(30, 60, 100, 0.06);
+            margin-bottom: 22px;
+        }
+
+        .map-title {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e7edf5;
+        }
+
+        .map-title h2 {
+            margin: 0 0 5px;
+        }
+
+        .map-title p {
+            margin: 0;
+            color: #71809d;
+        }
+
+        #map {
+            width: 100%;
+            height: 480px;
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #dce5f2;
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(30, 60, 100, 0.06);
+        }
+
+        .panel h2 {
+            margin-top: 0;
+        }
+
+        .stop-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px;
+            border: 1px solid #e4eaf3;
+            border-radius: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stop-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #edf4ff;
+            color: #244d88;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .stop-name {
+            font-weight: 700;
+        }
+
+        .stop-coordinates {
+            color: #8492a9;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .current-stop {
+            border-color: #2b5a9b;
+            background: #f1f6ff;
+        }
+
+        .gps-data {
+            display: grid;
+            gap: 12px;
+        }
+
+        .gps-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .gps-row span {
+            color: #71809d;
+        }
+
+        .end-trip-btn {
+            width: 100%;
+            border: 0;
+            background: #1e355d;
+            color: white;
+            padding: 15px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 18px;
+        }
+
+        .end-trip-btn:hover {
+            opacity: 0.92;
+        }
+
+        @media (max-width: 850px) {
+
+            .trip-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            .live-container {
+                padding: 20px 14px 90px;
+            }
+
+            .trip-info {
+                grid-template-columns: 1fr;
+            }
+
+            .live-header {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .live-header h1 {
+                font-size: 28px;
+            }
+
+            #map {
+                height: 400px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header class="driver-header">
+
+        <div class="driver-header-left">
+
+            <div class="driver-logo">
+                🚌
+            </div>
+
+            <div>
+
+                <h1>
+                    BusTrack
+                </h1>
+
+                <span>
+                    Driver Portal
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver-header-right">
+
+            <div class="driver-status">
+
+                <span class="status-dot"></span>
+
+                <span>
+                    Live
+                </span>
+
+            </div>
+
+
+            <button
+                class="driver-profile-btn"
+                onclick="goDashboard()"
+            >
+                D
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- MAIN -->
+
+    <main class="live-container">
+
+
+        <!-- HEADER -->
+
+        <div class="live-header">
+
+            <div>
+
+                <p class="small-label">
+                    DRIVER TRIP
+                </p>
+
+                <h1>
+                    Live Trip
+                </h1>
+
+                <p>
+                    Your live bus location is being shared.
+                </p>
+
+            </div>
+
+
+            <div class="live-status">
+
+                <span class="live-dot"></span>
+
+                GPS LIVE
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TRIP INFO -->
+
+        <section class="trip-info">
+
+
+            <div class="info-card">
+
+                <span>
+                    BUS
+                </span>
+
+                <strong id="busNumber">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    ROUTE
+                </span>
+
+                <strong id="routeName">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    TRIP STATUS
+                </span>
+
+                <strong id="tripStatus">
+                    Active
+                </strong>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>
+                    SPEED
+                </span>
+
+                <strong id="speed">
+                    0 km/h
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- MAP -->
+
+        <section class="map-card">
+
+
+            <div class="map-title">
+
+                <h2>
+                    📍 Live Bus Location
+                </h2>
+
+                <p id="locationMessage">
+                    Waiting for GPS location...
+                </p>
+
+            </div>
+
+
+            <div id="map"></div>
+
+
+        </section>
+
+
+
+        <!-- BOTTOM -->
+
+        <section class="bottom-grid">
+
+
+            <!-- STOPS -->
+
+            <div class="panel">
+
+                <h2>
+                    🛑 Route Stops
+                </h2>
+
+                <p>
+                    Stops in travelling order
+                </p>
+
+
+                <div id="stopsList">
+
+                    <p>
+                        Loading stops...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- GPS -->
+
+            <div class="panel">
+
+                <h2>
+                    📡 GPS Information
+                </h2>
+
+
+                <div class="gps-data">
+
+
+                    <div class="gps-row">
+
+                        <span>
+                            Latitude
+                        </span>
+
+                        <strong id="latitude">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="gps-row">
+
+                        <span>
+                            Longitude
+                        </span>
+
+                        <strong id="longitude">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="gps-row">
+
+                        <span>
+                            Speed
+                        </span>
+
+                        <strong id="gpsSpeed">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="gps-row">
+
+                        <span>
+                            Last Updated
+                        </span>
+
+                        <strong id="lastUpdated">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    class="end-trip-btn"
+                    onclick="endTrip()"
+                >
+
+                    🛑 End Trip
+
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- SUPABASE -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <script
+        src="../js/config/supabase.js"
+    ></script>
+
+
+    <!-- LEAFLET -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
+
+
+    <!-- LIVE TRIP JS -->
+
+    <script
+        src="../js/driver/live-trip.js"
+    ></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Bus Route Assignment | BusTrack</title>
+
+    <!-- GLOBAL CSS -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/glass.css">
+
+    <!-- ADMIN CSS -->
+    <link rel="stylesheet" href="../css/admin/admin.css">
+    <link rel="stylesheet" href="../css/admin/forms.css">
+    <link rel="stylesheet" href="../css/admin/tables.css">
+
+
+    <style>
+
+        /* ==========================================
+           BUS ROUTE ASSIGNMENT
+        ========================================== */
+
+        .assignment-card {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(210, 220, 235, 0.9);
+            border-radius: 22px;
+
+            padding: 28px;
+            margin-bottom: 28px;
+
+            box-shadow:
+                0 12px 35px rgba(30, 50, 80, 0.07);
+        }
+
+
+        .assignment-header {
+            margin-bottom: 24px;
+        }
+
+
+        .assignment-header h3 {
+            margin: 0 0 7px;
+            color: #17233b;
+            font-size: 21px;
+        }
+
+
+        .assignment-header p {
+            margin: 0;
+            color: #718096;
+            font-size: 14px;
+        }
+
+
+        .assignment-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+
+        .assignment-grid .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+
+        .assignment-grid label {
+            font-weight: 600;
+            color: #334155;
+        }
+
+
+        .assignment-grid select {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #dbe3ef;
+            border-radius: 12px;
+
+            background: white;
+
+            font-size: 14px;
+            color: #17233b;
+
+            outline: none;
+        }
+
+
+        .assignment-grid select:focus {
+            border-color: #31558f;
+
+            box-shadow:
+                0 0 0 3px rgba(49, 85, 143, 0.08);
+        }
+
+
+        .assignment-actions {
+            display: flex;
+            justify-content: flex-end;
+
+            margin-top: 24px;
+        }
+
+
+        .assignment-preview {
+            margin-top: 25px;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+
+        .preview-title {
+            font-size: 12px;
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            color: #718096;
+
+            margin-bottom: 14px;
+        }
+
+
+        .preview-flow {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+
+            gap: 12px;
+        }
+
+
+        .preview-item {
+            padding: 10px 14px;
+
+            border-radius: 11px;
+
+            background: white;
+            border: 1px solid #dbe3ef;
+
+            color: #234477;
+            font-weight: 600;
+
+            min-width: 120px;
+            text-align: center;
+        }
+
+
+        .preview-arrow {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+
+
+        .assignment-status {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 6px 11px;
+
+            border-radius: 999px;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            background: #ecfdf3;
+            color: #16803c;
+        }
+
+
+        .assignment-empty {
+            padding: 35px 20px;
+
+            text-align: center;
+
+            color: #718096;
+        }
+
+
+        .route-name-cell strong {
+            display: block;
+            color: #17233b;
+        }
+
+
+        .route-name-cell span {
+            display: block;
+
+            margin-top: 4px;
+
+            color: #718096;
+            font-size: 12px;
+        }
+
+
+        @media (max-width: 900px) {
+
+            .assignment-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .assignment-card {
+                padding: 20px;
+            }
+
+
+            .assignment-actions {
+                justify-content: stretch;
+            }
+
+
+            .assignment-actions button {
+                width: 100%;
+            }
+
+
+            .preview-flow {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+
+            .preview-arrow {
+                transform: rotate(90deg);
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <header class="admin-header">
+
+        <div class="admin-header-left">
+
+            <div class="admin-logo">
+                🚌
+            </div>
+
+
+            <div>
+
+                <h1>
+                    BusTrack
+                </h1>
+
+                <span>
+                    Admin Portal
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-header-right">
+
+            <span class="admin-status">
+                ● Admin
+            </span>
+
+
+            <button
+                class="admin-profile-btn"
+                onclick="logoutAdmin()"
+            >
+                A
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ==========================================
+         MAIN
+    =========================================== -->
+
+    <main class="admin-container">
+
+
+        <!-- PAGE TITLE -->
+
+        <section class="admin-page-title">
+
+            <div>
+
+                <p class="small-label">
+                    ROUTE ASSIGNMENT
+                </p>
+
+
+                <h2>
+                    Bus Route Assignment
+                </h2>
+
+
+                <p>
+                    Connect buses, routes and drivers.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="secondary-btn"
+                onclick="goToBuses()"
+            >
+                ← Back to Buses
+            </button>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             STATISTICS
+        =========================================== -->
+
+        <section class="admin-stats">
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Assignments
+                </span>
+
+                <strong id="totalAssignments">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Assigned Buses
+                </span>
+
+                <strong id="assignedBuses">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Routes Used
+                </span>
+
+                <strong id="assignedRoutes">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Drivers Assigned
+                </span>
+
+                <strong id="assignedDrivers">
+                    0
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             NEW ASSIGNMENT
+        =========================================== -->
+
+        <section class="assignment-card">
+
+
+            <div class="assignment-header">
+
+                <p class="small-label">
+                    NEW ASSIGNMENT
+                </p>
+
+                <h3>
+                    Assign Bus to Route
+                </h3>
+
+                <p>
+                    Select the bus, route and driver for this assignment.
+                </p>
+
+            </div>
+
+
+
+            <form
+                id="busRouteForm"
+                onsubmit="saveBusRoute(event)"
+            >
+
+
+                <div class="assignment-grid">
+
+
+                    <!-- BUS -->
+
+                    <div class="form-group">
+
+                        <label for="busSelect">
+                            Bus
+                        </label>
+
+
+                        <select
+                            id="busSelect"
+                            onchange="updateAssignmentPreview()"
+                            required
+                        >
+
+                            <option value="">
+                                Select Bus
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- ROUTE -->
+
+                    <div class="form-group">
+
+                        <label for="routeSelect">
+                            Route
+                        </label>
+
+
+                        <select
+                            id="routeSelect"
+                            onchange="updateAssignmentPreview()"
+                            required
+                        >
+
+                            <option value="">
+                                Select Route
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- DRIVER -->
+
+                    <div class="form-group">
+
+                        <label for="driverSelect">
+                            Driver
+                        </label>
+
+
+                        <select
+                            id="driverSelect"
+                            onchange="updateAssignmentPreview()"
+                            required
+                        >
+
+                            <option value="">
+                                Select Driver
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- PREVIEW -->
+
+                <div class="assignment-preview">
+
+                    <div class="preview-title">
+                        ASSIGNMENT PREVIEW
+                    </div>
+
+
+                    <div class="preview-flow">
+
+
+                        <div
+                            class="preview-item"
+                            id="previewBus"
+                        >
+                            Select Bus
+                        </div>
+
+
+                        <div class="preview-arrow">
+                            →
+                        </div>
+
+
+                        <div
+                            class="preview-item"
+                            id="previewRoute"
+                        >
+                            Select Route
+                        </div>
+
+
+                        <div class="preview-arrow">
+                            →
+                        </div>
+
+
+                        <div
+                            class="preview-item"
+                            id="previewDriver"
+                        >
+                            Select Driver
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <div class="assignment-actions">
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                        id="assignButton"
+                    >
+                        Assign Bus & Route
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             ASSIGNMENTS TABLE
+        =========================================== -->
+
+        <section class="admin-table-card">
+
+
+            <div class="table-header">
+
+                <div>
+
+                    <p class="small-label">
+                        CURRENT ASSIGNMENTS
+                    </p>
+
+
+                    <h3>
+                        Bus Route List
+                    </h3>
+
+                </div>
+
+
+                <input
+                    type="search"
+                    id="assignmentSearch"
+                    placeholder="Search assignments..."
+                    oninput="filterAssignments()"
+                >
+
+            </div>
+
+
+
+            <div class="table-wrapper">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Bus
+                            </th>
+
+                            <th>
+                                Route
+                            </th>
+
+                            <th>
+                                Driver
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="assignmentTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="empty-table"
+                            >
+                                Loading assignments...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <script
+        src="../js/config/supabase.js"
+    ></script>
+
+
+    <!-- ==========================================
+         BUS ROUTE JS
+    =========================================== -->
+
+    <script
+        src="../js/admin/bus-routes.js"
+    ></script>
+
+
+</body>
+
+</html>

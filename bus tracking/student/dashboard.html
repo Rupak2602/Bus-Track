@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | Bus Tracking System</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../css/global.css">
+
+    <!-- Glass UI -->
+    <link rel="stylesheet" href="../css/student-glass.css">
+
+    <!-- Student CSS -->
+    <link rel="stylesheet" href="../css/student/student.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="../css/student/dashboard.css">
+</head>
+
+<body>
+
+    <!-- ==========================================
+         TOP NAVBAR
+    ========================================== -->
+
+    <header class="dashboard-header">
+
+        <div class="header-left">
+
+            <div class="bus-logo">
+                🚌
+            </div>
+
+            <div class="brand-info">
+                <h1>BusTrack</h1>
+                <span>Student Portal</span>
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <!-- Notification Button -->
+            <button
+                class="notification-btn"
+                onclick="openNotifications()"
+                title="Notifications"
+            >
+                🔔
+                <span id="notificationCount">0</span>
+            </button>
+
+
+            <!-- Profile Button -->
+            <button
+                class="profile-btn"
+                onclick="openProfile()"
+                title="Profile"
+            >
+                <span id="profileInitial">S</span>
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==========================================
+         MAIN CONTENT
+    ========================================== -->
+
+    <main class="dashboard-container">
+
+
+        <!-- ======================================
+             WELCOME SECTION
+        ====================================== -->
+
+        <section class="welcome-section">
+
+            <div>
+
+                <p class="small-label">
+                    STUDENT DASHBOARD
+                </p>
+
+                <h2>
+                    Hi,
+                    <span id="studentName">
+                        Student
+                    </span>
+                    👋
+                </h2>
+
+                <p class="welcome-text">
+                    Track your college bus and stay updated in real time.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================
+             LIVE BUS TRACKING CARD
+        ====================================== -->
+
+        <section class="live-card">
+
+            <div class="live-card-top">
+
+                <div>
+
+                    <span class="live-status">
+
+                        <span class="live-dot"></span>
+
+                        LIVE
+
+                    </span>
+
+                    <h3>
+                        Live Bus Tracking
+                    </h3>
+
+                    <p>
+                        See your bus location in real time.
+                    </p>
+
+                </div>
+
+
+                <div class="bus-emoji">
+                    🚌
+                </div>
+
+            </div>
+
+
+            <!-- Live Information -->
+
+            <div class="live-info">
+
+
+                <!-- Bus -->
+
+                <div class="info-item">
+
+                    <span>
+                        Bus
+                    </span>
+
+                    <strong id="liveBusNumber">
+                        No active bus
+                    </strong>
+
+                </div>
+
+
+                <!-- Route -->
+
+                <div class="info-item">
+
+                    <span>
+                        Route
+                    </span>
+
+                    <strong id="liveRoute">
+                        No active route
+                    </strong>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="info-item">
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong id="busStatus">
+                        Waiting
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Track Button -->
+
+            <button
+                class="primary-btn"
+                onclick="openLiveTracking()"
+            >
+                Track Bus Live →
+            </button>
+
+        </section>
+
+
+        <!-- ======================================
+             QUICK ACCESS
+        ====================================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="small-label">
+                        QUICK ACCESS
+                    </p>
+
+                    <h3>
+                        What do you want to do?
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-grid">
+
+
+                <!-- Live Tracking -->
+
+                <button
+                    class="quick-card"
+                    onclick="openLiveTracking()"
+                >
+
+                    <div class="quick-icon">
+                        📍
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Live Tracking
+                        </strong>
+
+                        <span>
+                            Track your bus
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <!-- My Buses -->
+
+                <button
+                    class="quick-card"
+                    onclick="openBuses()"
+                >
+
+                    <div class="quick-icon">
+                        🚌
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            My Buses
+                        </strong>
+
+                        <span>
+                            View available buses
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <!-- Routes -->
+
+                <button
+                    class="quick-card"
+                    onclick="openRoutes()"
+                >
+
+                    <div class="quick-icon">
+                        🛣️
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Routes
+                        </strong>
+
+                        <span>
+                            Explore bus routes
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <!-- Stops -->
+
+                <button
+                    class="quick-card"
+                    onclick="openStops()"
+                >
+
+                    <div class="quick-icon">
+                        📌
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Bus Stops
+                        </strong>
+
+                        <span>
+                            Find nearby stops
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================
+             NEXT STOP
+        ====================================== -->
+
+        <section class="next-stop-card">
+
+            <div class="next-stop-icon">
+                📍
+            </div>
+
+
+            <div class="next-stop-content">
+
+                <span>
+                    NEXT STOP
+                </span>
+
+                <h3 id="nextStop">
+                    No active trip
+                </h3>
+
+                <p id="nextStopInfo">
+                    Start tracking when your bus begins its trip.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================
+             LATEST NOTIFICATION
+        ====================================== -->
+
+        <section class="notification-card">
+
+            <div class="notification-icon">
+                🔔
+            </div>
+
+
+            <div class="notification-content">
+
+                <span>
+                    LATEST UPDATE
+                </span>
+
+                <h3 id="latestNotification">
+                    You're all caught up
+                </h3>
+
+                <p id="latestNotificationMessage">
+                    No new bus notifications.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==========================================
+         BOTTOM NAVIGATION
+    ========================================== -->
+
+    <nav class="bottom-nav">
+
+
+        <!-- Home -->
+
+        <button
+            class="nav-item active"
+            onclick="goHome()"
+        >
+
+            <span>
+                ⌂
+            </span>
+
+            <small>
+                Home
+            </small>
+
+        </button>
+
+
+        <!-- Track -->
+
+        <button
+            class="nav-item"
+            onclick="openLiveTracking()"
+        >
+
+            <span>
+                📍
+            </span>
+
+            <small>
+                Track
+            </small>
+
+        </button>
+
+
+        <!-- Alerts -->
+
+        <button
+            class="nav-item"
+            onclick="openNotifications()"
+        >
+
+            <span>
+                🔔
+            </span>
+
+            <small>
+                Alerts
+            </small>
+
+        </button>
+
+
+        <!-- Profile -->
+
+        <button
+            class="nav-item"
+            onclick="openProfile()"
+        >
+
+            <span>
+                👤
+            </span>
+
+            <small>
+                Profile
+            </small>
+
+        </button>
+
+    </nav>
+
+
+    <!-- ==========================================
+         SUPABASE
+    ========================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Supabase Configuration -->
+    <script src="../js/config/supabase.js"></script>
+
+    <!-- Student Dashboard JavaScript -->
+    <script src="../js/student/dashboard.js"></script>
+
+</body>
+
+</html>

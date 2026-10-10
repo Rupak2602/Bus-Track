@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Signup | Bus Tracking System</title>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/glass.css">
+    <link rel="stylesheet" href="../css/student/student.css">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f6f8fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .signup-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 35px 30px;
+            box-shadow: 0 20px 60px rgba(20, 35, 60, 0.12);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef4ff;
+            font-size: 30px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 25px;
+            color: #172033;
+        }
+
+        .brand p {
+            margin: 8px 0 0;
+            color: #7b8495;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #30394a;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 51px;
+            box-sizing: border-box;
+            border: 1px solid #e1e6ee;
+            border-radius: 15px;
+            padding: 0 16px;
+            font-size: 15px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.85);
+            transition: 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #7d9edb;
+            box-shadow: 0 0 0 4px rgba(125, 158, 219, 0.10);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+        }
+
+        .signup-btn {
+            width: 100%;
+            height: 53px;
+            border: none;
+            border-radius: 16px;
+            background: #1d2d4f;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: 0.2s ease;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(29, 45, 79, 0.20);
+        }
+
+        .signup-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff1f1;
+            color: #b42318;
+            border: 1px solid #ffd5d5;
+        }
+
+        .message.success {
+            display: block;
+            background: #effaf3;
+            color: #18733a;
+            border: 1px solid #ccefd8;
+        }
+
+        .login-text {
+            text-align: center;
+            margin-top: 24px;
+            color: #7b8495;
+            font-size: 14px;
+        }
+
+        .login-text a {
+            color: #506fa8;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #8a93a3;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .signup-card {
+                padding: 30px 22px;
+                border-radius: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="signup-container">
+
+        <section class="signup-card">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🚌
+                </div>
+
+                <h1>Create Account</h1>
+
+                <p>Join the College Bus Tracking System</p>
+
+            </div>
+
+            <div id="signupMessage" class="message"></div>
+
+            <form id="studentSignupForm">
+
+                <!-- Full Name -->
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Email -->
+                <div class="form-group">
+
+                    <label for="email">
+                        Student Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="toggle-password"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            placeholder="Re-enter your password"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="toggleConfirmPassword"
+                            class="toggle-password"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    id="signupBtn"
+                    class="signup-btn"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <div class="login-text">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Sign In
+                </a>
+
+            </div>
+
+
+            <a
+                href="../index.html"
+                class="back-home"
+            >
+                ← Back to Home
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Supabase Configuration -->
+    <script src="../js/config/supabase.js"></script>
+
+    <!-- Student Authentication -->
+    <script src="../js/auth/student-auth.js"></script>
+
+</body>
+
+</html>

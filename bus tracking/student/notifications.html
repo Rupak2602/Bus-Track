@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | BusTrack</title>
+
+  <link rel="stylesheet" href="../css/global.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f4f7fc;
+      color: #192b4b;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background: #fff;
+      padding: 18px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f2;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand { font-size: 23px; font-weight: 800; }
+    .subtitle { color: #8290a9; font-size: 13px; margin-top: 4px; }
+
+    main {
+      max-width: 850px;
+      margin: 35px auto;
+      padding: 0 18px 100px;
+    }
+
+    .heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    .muted { color: #8190aa; }
+
+    button, .back {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .primary { background: #20375f; color: white; }
+    .secondary { background: #eaf0fb; color: #20375f; }
+
+    .summary {
+      background: white;
+      border: 1px solid #e1e8f3;
+      border-radius: 18px;
+      padding: 20px;
+      margin: 22px 0;
+      box-shadow: 0 8px 25px #1d355708;
+    }
+
+    .notice {
+      background: white;
+      border: 1px solid #e1e8f3;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 13px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: 0 5px 20px #1d355706;
+    }
+
+    .notice.unread {
+      background: #f0f5ff;
+      border-color: #bfd2fa;
+    }
+
+    .notice-icon {
+      background: #e8efff;
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      font-size: 23px;
+    }
+
+    .notice-content { flex: 1; min-width: 0; }
+    .notice-title { font-weight: 800; margin: 2px 0 8px; }
+    .notice-message { line-height: 1.5; overflow-wrap: anywhere; }
+    .notice-time { color: #8190aa; font-size: 12px; margin-top: 10px; }
+
+    .empty {
+      text-align: center;
+      padding: 45px 20px;
+      background: white;
+      border: 1px solid #e1e8f3;
+      border-radius: 18px;
+    }
+
+    .empty-icon { font-size: 45px; margin-bottom: 12px; }
+    #status { margin: 15px 0; line-height: 1.5; }
+
+    @media (max-width: 500px) {
+      main { margin-top: 24px; }
+      h1 { font-size: 24px; }
+      header { padding: 15px 18px; }
+      .notice { padding: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div>
+      <div class="brand">🚌 BusTrack</div>
+      <div class="subtitle">Student Portal</div>
+    </div>
+    <a class="back secondary" href="dashboard.html">← Home</a>
+  </header>
+
+  <main>
+    <div class="heading">
+      <div>
+        <h1>🔔 Notifications</h1>
+        <div class="muted">Bus arrival alerts and trip updates</div>
+      </div>
+      <button class="primary" id="markAllBtn">Mark all read</button>
+    </div>
+
+    <div class="summary">
+      <div class="muted">Unread notifications</div>
+      <h1 id="unreadCount" style="margin-top:8px">0</h1>
+      <div class="muted">Your latest bus updates appear here.</div>
+    </div>
+
+    <div id="status" class="muted">Loading notifications...</div>
+    <section id="notificationList"></section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config/supabase.js"></script>
+
+  <script>
+    const list = document.getElementById("notificationList");
+    const statusBox = document.getElementById("status");
+    const unreadCount = document.getElementById("unreadCount");
+    const markAllBtn = document.getElementById("markAllBtn");
+
+    let currentStudentId = null;
+    let notifications = [];
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function formatTime(value) {
+      if (!value) return "Time unavailable";
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "Time unavailable";
+
+      return date.toLocaleString();
+    }
+
+    async function loadNotifications() {
+      try {
+        statusBox.textContent = "Checking student account...";
+
+        const { data: authData, error: authError } =
+          await supabaseClient.auth.getUser();
+
+        if (authError) throw authError;
+
+        const user = authData?.user;
+
+        if (!user) {
+          statusBox.textContent = "Please log in to view your notifications.";
+          list.innerHTML =
+            '<div class="empty"><div class="empty-icon">🔐</div>' +
+            '<h3>Login required</h3>' +
+            '<a class="back primary" href="login.html">Student Login</a></div>';
+          return;
+        }
+
+        const { data: student, error: studentError } =
+          await supabaseClient
+            .from("students")
+            .select("id")
+            .eq("profile_id", user.id)
+            .maybeSingle();
+
+        if (studentError) throw studentError;
+
+        if (!student) {
+          statusBox.textContent =
+            "Student profile not found. Please check your student account.";
+          list.innerHTML = "";
+          return;
+        }
+
+        currentStudentId = student.id;
+
+        const { data, error } = await supabaseClient
+          .from("notifications")
+          .select("*")
+          .eq("student_id", currentStudentId)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        notifications = data || [];
+        renderNotifications();
+        statusBox.textContent = "";
+      } catch (error) {
+        console.error("Notification loading error:", error);
+        statusBox.textContent =
+          "Could not load notifications. Check the browser Console and Supabase RLS policies.";
+      }
+    }
+
+    function renderNotifications() {
+      const unread = notifications.filter(item => !item.is_read).length;
+      unreadCount.textContent = unread;
+
+      if (notifications.length === 0) {
+        list.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">🔔</div>
+            <h3>You're all caught up</h3>
+            <p class="muted">
+              No bus notifications yet. An alert will appear here
+              when a notification is saved for your student account.
+            </p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = notifications.map(item => `
+        <article class="notice ${item.is_read ? "" : "unread"}">
+          <div class="notice-icon">🚌</div>
+          <div class="notice-content">
+            <div class="notice-title">${escapeHTML(item.title || "Bus Update")}</div>
+            <div class="notice-message">${escapeHTML(item.message || "Bus status updated.")}</div>
+            <div class="notice-time">${escapeHTML(formatTime(item.created_at))}</div>
+            ${
+              item.is_read
+                ? '<span class="muted">Read</span>'
+                : `<button class="secondary mark-read" data-id="${escapeHTML(item.id)}">Mark as read</button>`
+            }
+          </div>
+        </article>
+      `).join("");
+
+      list.querySelectorAll(".mark-read").forEach(button => {
+        button.addEventListener("click", () => markAsRead(button.dataset.id));
+      });
+    }
+
+    async function markAsRead(id) {
+      try {
+        const { error } = await supabaseClient
+          .from("notifications")
+          .update({ is_read: true })
+          .eq("id", id)
+          .eq("student_id", currentStudentId);
+
+        if (error) throw error;
+
+        const item = notifications.find(n => String(n.id) === String(id));
+        if (item) item.is_read = true;
+
+        renderNotifications();
+      } catch (error) {
+        console.error("Mark read error:", error);
+        alert("Could not mark notification as read. Check the notifications UPDATE policy.");
+      }
+    }
+
+    markAllBtn.addEventListener("click", async () => {
+      if (!currentStudentId) return;
+
+      try {
+        const { error } = await supabaseClient
+          .from("notifications")
+          .update({ is_read: true })
+          .eq("student_id", currentStudentId)
+          .eq("is_read", false);
+
+        if (error) throw error;
+
+        notifications.forEach(item => item.is_read = true);
+        renderNotifications();
+      } catch (error) {
+        console.error("Mark all read error:", error);
+        alert("Could not update notifications. Check the Supabase UPDATE policy.");
+      }
+    });
+
+    loadNotifications();
+  </script>
+</body>
+</html>

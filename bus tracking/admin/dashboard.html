@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Dashboard | BusTrack</title>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/glass.css">
+    <link rel="stylesheet" href="../css/admin/admin.css">
+
+</head>
+
+
+<body>
+
+    <!-- ==============================
+         HEADER
+    =============================== -->
+
+    <header class="admin-header">
+
+        <div class="admin-header-left">
+
+            <div class="admin-logo">
+                🚌
+            </div>
+
+            <div>
+
+                <h1>BusTrack</h1>
+
+                <span>Admin Portal</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-header-right">
+
+            <span class="admin-status">
+                ● Admin
+            </span>
+
+            <button
+                class="admin-profile-btn"
+                onclick="logoutAdmin()"
+            >
+                A
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ==============================
+         MAIN
+    =============================== -->
+
+    <main class="admin-container">
+
+        <!-- PAGE HEADER -->
+
+        <section class="admin-page-title">
+
+            <div>
+
+                <p class="small-label">
+                    CONTROL CENTER
+                </p>
+
+                <h2>
+                    Admin Dashboard
+                </h2>
+
+                <p>
+                    Manage buses, routes, stops and drivers.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             STATISTICS
+        =============================== -->
+
+        <section class="admin-stats">
+
+            <div class="stat-card">
+
+                <span>
+                    Total Buses
+                </span>
+
+                <strong id="totalBuses">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Active Buses
+                </span>
+
+                <strong id="activeBuses">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Routes
+                </span>
+
+                <strong id="totalRoutes">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Stops
+                </span>
+
+                <strong id="totalStops">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             QUICK ACTIONS
+        =============================== -->
+
+        <section class="admin-table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <p class="small-label">
+                        MANAGEMENT
+                    </p>
+
+                    <h3>
+                        Quick Actions
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions-grid">
+
+                <button
+                    class="quick-action-card"
+                    onclick="goTo('buses.html')"
+                >
+
+                    <span class="quick-icon">
+                        🚌
+                    </span>
+
+                    <strong>
+                        Manage Buses
+                    </strong>
+
+                    <small>
+                        Add and manage buses
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="quick-action-card"
+                    onclick="goTo('routes.html')"
+                >
+
+                    <span class="quick-icon">
+                        🛣️
+                    </span>
+
+                    <strong>
+                        Manage Routes
+                    </strong>
+
+                    <small>
+                        Create bus routes
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="quick-action-card"
+                    onclick="goTo('stops.html')"
+                >
+
+                    <span class="quick-icon">
+                        📍
+                    </span>
+
+                    <strong>
+                        Manage Stops
+                    </strong>
+
+                    <small>
+                        Add GPS bus stops
+                    </small>
+
+                </button>
+
+
+                <button
+                    class="quick-action-card"
+                    onclick="goTo('drivers.html')"
+                >
+
+                    <span class="quick-icon">
+                        👨‍✈️
+                    </span>
+
+                    <strong>
+                        Manage Drivers
+                    </strong>
+
+                    <small>
+                        Assign drivers
+                    </small>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             LIVE TRACKING
+        =============================== -->
+
+        <section class="admin-table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <p class="small-label">
+                        LIVE SYSTEM
+                    </p>
+
+                    <h3>
+                        Bus Tracking
+                    </h3>
+
+                </div>
+
+
+                <button
+                    class="primary-btn"
+                    onclick="goTo('live-tracking.html')"
+                >
+                    Open Live Tracking →
+                </button>
+
+            </div>
+
+
+            <div class="dashboard-empty">
+
+                <div class="empty-icon">
+                    🚌
+                </div>
+
+                <h3>
+                    Live tracking ready
+                </h3>
+
+                <p>
+                    Active buses will appear here when drivers start their trips.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==============================
+             SYSTEM STATUS
+        =============================== -->
+
+        <section class="admin-table-card">
+
+            <div class="table-header">
+
+                <div>
+
+                    <p class="small-label">
+                        SYSTEM
+                    </p>
+
+                    <h3>
+                        System Status
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="system-status">
+
+                <div class="status-item">
+
+                    <span class="status-dot green"></span>
+
+                    <div>
+
+                        <strong>
+                            Supabase
+                        </strong>
+
+                        <small>
+                            Connected
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-item">
+
+                    <span class="status-dot green"></span>
+
+                    <div>
+
+                        <strong>
+                            Admin Authentication
+                        </strong>
+
+                        <small>
+                            Active
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-item">
+
+                    <span class="status-dot green"></span>
+
+                    <div>
+
+                        <strong>
+                            Bus Tracking
+                        </strong>
+
+                        <small>
+                            Ready
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ==============================
+         SUPABASE
+    =============================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../js/config/supabase.js"></script>
+
+    <script src="../js/admin/dashboard.js"></script>
+
+</body>
+
+</html>

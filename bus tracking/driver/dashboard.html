@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Driver Dashboard | BusTrack</title>
+
+
+    <!-- Global CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/global.css"
+    >
+
+    <!-- Glass CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/glass.css"
+    >
+
+    <!-- Driver CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/driver/driver.css"
+    >
+
+    <!-- Dashboard CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/driver/dashboard.css"
+    >
+
+
+    <style>
+
+        /* =========================================
+           FALLBACK DASHBOARD STYLES
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #172b4d;
+        }
+
+        .driver-header {
+            width: 100%;
+            min-height: 82px;
+            padding: 16px 32px;
+            background: rgba(255,255,255,0.95);
+            border-bottom: 1px solid #e4e9f2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .driver-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .driver-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: #eef4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .driver-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .driver-header span {
+            color: #71809a;
+        }
+
+        .driver-header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .driver-status {
+            padding: 10px 17px;
+            border-radius: 30px;
+            background: #ecf9f0;
+            color: #23854b;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22a35a;
+            display: inline-block;
+        }
+
+        .driver-profile-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid #dce4f0;
+            background: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .driver-container {
+            width: min(1100px, calc(100% - 32px));
+            margin: 30px auto 110px;
+        }
+
+        .driver-welcome {
+            margin-bottom: 25px;
+        }
+
+        .small-label {
+            margin: 0 0 7px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            color: #71809a;
+        }
+
+        .driver-welcome h2 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .driver-welcome p:last-child {
+            margin: 0;
+            color: #71809a;
+        }
+
+        .driver-bus-card,
+        .start-trip-card,
+        .gps-card,
+        .current-trip-card {
+            background: white;
+            border: 1px solid #e2e8f2;
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 10px 30px rgba(25,45,80,0.05);
+        }
+
+        .driver-bus-top {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .driver-bus-icon,
+        .gps-icon,
+        .current-trip-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 17px;
+            background: #eef4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            flex-shrink: 0;
+        }
+
+        .card-label {
+            display: block;
+            color: #71809a;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .driver-bus-top h3,
+        .current-trip-card h3 {
+            margin: 0;
+        }
+
+        .driver-bus-top p {
+            margin: 5px 0 0;
+            color: #71809a;
+        }
+
+        .driver-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #edf0f5;
+        }
+
+        .driver-info-item span {
+            display: block;
+            color: #71809a;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .driver-info-item strong {
+            font-size: 15px;
+        }
+
+        .start-trip-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .start-trip-card h3 {
+            margin: 4px 0 7px;
+        }
+
+        .start-trip-card p:not(.small-label) {
+            margin: 0;
+            color: #71809a;
+        }
+
+        .start-trip-btn {
+            border: 0;
+            background: #1d4ed8;
+            color: white;
+            border-radius: 14px;
+            padding: 14px 22px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .gps-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .gps-content {
+            flex: 1;
+        }
+
+        .gps-content h3 {
+            margin: 2px 0 5px;
+        }
+
+        .gps-content p {
+            margin: 0;
+            color: #71809a;
+        }
+
+        .gps-indicator {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #a7afbd;
+        }
+
+        .gps-indicator.active {
+            background: #20a55a;
+            box-shadow: 0 0 0 6px rgba(32,165,90,0.12);
+        }
+
+        .driver-section {
+            margin: 30px 0;
+        }
+
+        .driver-section h3 {
+            margin: 0 0 18px;
+            font-size: 24px;
+        }
+
+        .driver-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .driver-action-card {
+            border: 1px solid #e2e8f2;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+            cursor: pointer;
+            min-height: 135px;
+            box-shadow: 0 8px 25px rgba(25,45,80,0.04);
+        }
+
+        .driver-action-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            background: #eef4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            margin-bottom: 13px;
+        }
+
+        .driver-action-card strong {
+            display: block;
+            color: #172b4d;
+            margin-bottom: 5px;
+        }
+
+        .driver-action-card span {
+            color: #71809a;
+            font-size: 13px;
+        }
+
+        .driver-action-card.emergency {
+            border-color: #f0dcdc;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 15px;
+            border: 1px solid #e0e5ed;
+            background: white;
+            color: #172b4d;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .logout-btn:hover {
+            background: #f8fafc;
+        }
+
+        .driver-bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(580px, calc(100% - 30px));
+            background: rgba(255,255,255,0.96);
+            border: 1px solid #e0e6ef;
+            border-radius: 25px;
+            padding: 8px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            box-shadow: 0 15px 40px rgba(20,40,80,0.12);
+            z-index: 1000;
+        }
+
+        .driver-bottom-nav button {
+            border: 0;
+            background: transparent;
+            border-radius: 18px;
+            padding: 10px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .driver-bottom-nav button.active {
+            background: #eef4ff;
+            color: #1d4ed8;
+        }
+
+        .driver-bottom-nav span {
+            display: block;
+            font-size: 20px;
+        }
+
+        .driver-bottom-nav small {
+            display: block;
+            margin-top: 3px;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .driver-header {
+                padding: 14px 18px;
+            }
+
+            .driver-header h1 {
+                font-size: 20px;
+            }
+
+            .driver-container {
+                width: calc(100% - 22px);
+                margin-top: 20px;
+            }
+
+            .driver-welcome h2 {
+                font-size: 25px;
+            }
+
+            .driver-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .start-trip-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .start-trip-btn {
+                width: 100%;
+            }
+
+            .driver-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .driver-action-card {
+                min-height: 125px;
+            }
+
+            .driver-status {
+                padding: 8px 11px;
+            }
+
+            .driver-profile-btn {
+                width: 42px;
+                height: 42px;
+            }
+
+        }
+
+
+        @media (max-width: 430px) {
+
+            .driver-actions {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .driver-action-card {
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header class="driver-header">
+
+    <div class="driver-header-left">
+
+        <div class="driver-logo">
+            🚌
+        </div>
+
+        <div>
+
+            <h1>
+                BusTrack
+            </h1>
+
+            <span>
+                Driver Portal
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="driver-header-right">
+
+        <div class="driver-status">
+
+            <span
+                id="driverStatusDot"
+                class="status-dot"
+            ></span>
+
+            <span id="driverStatusText">
+                Available
+            </span>
+
+        </div>
+
+
+        <button
+            class="driver-profile-btn"
+            onclick="openProfile()"
+        >
+
+            <span id="driverInitial">
+                D
+            </span>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="driver-container">
+
+
+    <!-- WELCOME -->
+
+    <section class="driver-welcome">
+
+        <p class="small-label">
+            DRIVER DASHBOARD
+        </p>
+
+        <h2>
+            Hi,
+            <span id="driverName">
+                Driver
+            </span>
+            👋
+        </h2>
+
+        <p>
+            Manage your bus trip and share live location.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================================
+         DRIVER / BUS CARD
+    ========================================== -->
+
+    <section class="driver-bus-card">
+
+        <div class="driver-bus-top">
+
+            <div class="driver-bus-icon">
+                🚌
+            </div>
+
+            <div>
+
+                <span class="card-label">
+                    ASSIGNED BUS
+                </span>
+
+                <h3 id="assignedBus">
+                    No bus assigned
+                </h3>
+
+                <p id="assignedRoute">
+                    No route assigned
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver-info-grid">
+
+            <div class="driver-info-item">
+
+                <span>
+                    Driver Code
+                </span>
+
+                <strong id="driverCode">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="driver-info-item">
+
+                <span>
+                    Bus Status
+                </span>
+
+                <strong id="busStatus">
+                    Available
+                </strong>
+
+            </div>
+
+
+            <div class="driver-info-item">
+
+                <span>
+                    Trip Status
+                </span>
+
+                <strong id="tripStatus">
+                    Not Started
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         START TRIP
+    ========================================== -->
+
+    <section class="start-trip-card">
+
+        <div>
+
+            <p class="small-label">
+                TODAY'S TRIP
+            </p>
+
+            <h3>
+                Ready to start?
+            </h3>
+
+            <p>
+                Start your trip to share your live bus
+                location with students.
+            </p>
+
+        </div>
+
+
+        <button
+            class="start-trip-btn"
+            onclick="goToStartTrip()"
+        >
+
+            🚀
+            Start Trip
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================================
+         GPS
+    ========================================== -->
+
+    <section class="gps-card">
+
+        <div class="gps-icon">
+            📍
+        </div>
+
+
+        <div class="gps-content">
+
+            <span class="card-label">
+                GPS LOCATION
+            </span>
+
+            <h3 id="gpsStatus">
+                GPS not started
+            </h3>
+
+            <p id="gpsMessage">
+                Start your trip to begin sharing
+                your live location.
+            </p>
+
+        </div>
+
+
+        <div
+            id="gpsIndicator"
+            class="gps-indicator"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         QUICK ACTIONS
+    ========================================== -->
+
+    <section class="driver-section">
+
+        <p class="small-label">
+            QUICK ACTIONS
+        </p>
+
+        <h3>
+            Driver Tools
+        </h3>
+
+
+        <div class="driver-actions">
+
+
+            <!-- STOPS -->
+
+            <button
+                class="driver-action-card"
+                onclick="openStops()"
+            >
+
+                <div class="action-icon">
+                    📍
+                </div>
+
+                <strong>
+                    Stops
+                </strong>
+
+                <span>
+                    View route stops
+                </span>
+
+            </button>
+
+
+            <!-- TRIP HISTORY -->
+
+            <button
+                class="driver-action-card"
+                onclick="openTripHistory()"
+            >
+
+                <div class="action-icon">
+                    📋
+                </div>
+
+                <strong>
+                    Trip History
+                </strong>
+
+                <span>
+                    View previous trips
+                </span>
+
+            </button>
+
+
+            <!-- REPORT -->
+
+            <button
+                class="driver-action-card"
+                onclick="openReportIssue()"
+            >
+
+                <div class="action-icon">
+                    ⚠️
+                </div>
+
+                <strong>
+                    Report Issue
+                </strong>
+
+                <span>
+                    Report a problem
+                </span>
+
+            </button>
+
+
+            <!-- EMERGENCY -->
+
+            <button
+                class="driver-action-card emergency"
+                onclick="emergencyAction()"
+            >
+
+                <div class="action-icon">
+                    🚨
+                </div>
+
+                <strong>
+                    Emergency
+                </strong>
+
+                <span>
+                    Emergency assistance
+                </span>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         CURRENT TRIP
+    ========================================== -->
+
+    <section class="current-trip-card">
+
+        <div class="driver-bus-top">
+
+            <div class="current-trip-icon">
+                🛣️
+            </div>
+
+            <div>
+
+                <span class="card-label">
+                    CURRENT TRIP
+                </span>
+
+                <h3 id="currentTripText">
+                    No active trip
+                </h3>
+
+                <p id="currentTripInfo">
+                    Start a trip to begin live tracking.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         LOGOUT
+    ========================================== -->
+
+    <button
+        class="logout-btn"
+        onclick="logoutDriver()"
+    >
+
+        Logout
+
+    </button>
+
+
+</main>
+
+
+
+<!-- =========================================
+     BOTTOM NAVIGATION
+========================================= -->
+
+<nav class="driver-bottom-nav">
+
+
+    <!-- HOME -->
+
+    <button
+        class="active"
+        onclick="goHome()"
+    >
+
+        <span>
+            ⌂
+        </span>
+
+        <small>
+            Home
+        </small>
+
+    </button>
+
+
+    <!-- TRIP -->
+
+    <button
+        onclick="goToStartTrip()"
+    >
+
+        <span>
+            🚀
+        </span>
+
+        <small>
+            Trip
+        </small>
+
+    </button>
+
+
+    <!-- STOPS -->
+
+    <button
+        onclick="openStops()"
+    >
+
+        <span>
+            📍
+        </span>
+
+        <small>
+            Stops
+        </small>
+
+    </button>
+
+
+    <!-- PROFILE -->
+
+    <button
+        onclick="openProfile()"
+    >
+
+        <span>
+            👤
+        </span>
+
+        <small>
+            Profile
+        </small>
+
+    </button>
+
+
+</nav>
+
+
+
+<!-- =========================================
+     SUPABASE
+========================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/config/supabase.js"></script>
+
+
+
+<!-- =========================================
+     DASHBOARD FUNCTIONS
+========================================= -->
+
+<script>
+
+
+// ============================================================
+// START TRIP
+// ============================================================
+
+function goToStartTrip() {
+
+    window.location.href =
+        "start-trip.html";
+
+}
+
+
+
+// ============================================================
+// PROFILE
+// ============================================================
+
+function openProfile() {
+
+    window.location.href =
+        "profile.html";
+
+}
+
+
+
+// ============================================================
+// STOPS
+// ============================================================
+
+function openStops() {
+
+    window.location.href =
+        "stops.html";
+
+}
+
+
+
+// ============================================================
+// TRIP HISTORY
+// ============================================================
+
+function openTripHistory() {
+
+    window.location.href =
+        "trip-history.html";
+
+}
+
+
+
+// ============================================================
+// REPORT ISSUE
+// ============================================================
+
+function openReportIssue() {
+
+    window.location.href =
+        "report-issue.html";
+
+}
+
+
+
+// ============================================================
+// HOME
+// ============================================================
+
+function goHome() {
+
+    window.location.href =
+        "dashboard.html";
+
+}
+
+
+
+// ============================================================
+// EMERGENCY
+// ============================================================
+
+function emergencyAction() {
+
+    const confirmed =
+        confirm(
+            "Emergency assistance request send pannava?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    alert(
+        "Emergency request feature ready. 🚨"
+    );
+
+}
+
+
+
+// ============================================================
+// LOGOUT DRIVER
+// ============================================================
+
+async function logoutDriver() {
+
+    console.log(
+        "Logout button clicked"
+    );
+
+
+    try {
+
+        // Check Supabase
+
+        if (
+            typeof supabaseClient ===
+            "undefined"
+        ) {
+
+            console.error(
+                "supabaseClient is not defined"
+            );
+
+            alert(
+                "Supabase connection problem."
+            );
+
+            return;
+
+        }
+
+
+        // Sign out
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.signOut();
+
+
+        // Error
+
+        if (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+            alert(
+                "Logout failed: " +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "Driver logout successful"
+        );
+
+
+        // Go to login
+
+        window.location.href =
+            "login.html";
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Logout exception:",
+            error
+        );
+
+        alert(
+            "Logout failed. Please try again."
+        );
+
+    }
+
+}
+
+
+</script>
+
+
+
+<!-- =========================================
+     DRIVER DASHBOARD JS
+========================================= -->
+
+<script src="../js/driver/dashboard.js"></script>
+
+
+</body>
+
+</html>

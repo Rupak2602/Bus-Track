@@ -1,0 +1,253 @@
+
+/* =========================================
+   BUS TRACK — STUDENT PREMIUM GLASS UI
+   Student portal only
+========================================= */
+
+:root {
+    --sg-bg: #f3f6fc;
+    --sg-white: rgba(255, 255, 255, 0.78);
+    --sg-white-solid: #ffffff;
+    --sg-border: rgba(255, 255, 255, 0.95);
+    --sg-navy: #172b4d;
+    --sg-blue: #356df3;
+    --sg-muted: #7183a2;
+    --sg-shadow: 0 14px 40px rgba(35, 64, 115, 0.09);
+    --sg-radius: 24px;
+}
+
+/* Background */
+
+body {
+    background:
+        radial-gradient(ellipse at 10% 0%, rgba(174, 202, 255, .32), transparent 38%),
+        radial-gradient(ellipse at 95% 20%, rgba(215, 206, 255, .25), transparent 35%),
+        linear-gradient(145deg, #f8faff 0%, #eef3fb 100%) !important;
+    color: var(--sg-navy);
+}
+
+/* Premium glass cards */
+
+.card,
+.stat-card,
+.dashboard-card,
+.bus-card,
+.route-card,
+.stop-card,
+.trip-card,
+.profile-card,
+.notification-card,
+.info-card,
+.widget,
+.panel,
+.form-card,
+.modal-content,
+.empty-state,
+.summary-card {
+    background: var(--sg-white) !important;
+    border: 1px solid var(--sg-border) !important;
+    border-radius: var(--sg-radius) !important;
+    box-shadow: var(--sg-shadow);
+    backdrop-filter: blur(22px) saturate(145%);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.card:hover,
+.bus-card:hover,
+.route-card:hover,
+.stop-card:hover,
+.trip-card:hover,
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 48px rgba(35, 64, 115, .13);
+    border-color: rgba(91, 145, 255, .4) !important;
+}
+
+/* Premium buttons */
+
+button,
+.btn,
+.button,
+a.btn,
+.primary-btn,
+.secondary-btn,
+.submit-btn {
+    border-radius: 14px;
+    font-weight: 650;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.primary-btn,
+.submit-btn,
+.btn-primary,
+button.primary,
+button[type="submit"] {
+    color: #fff;
+    background: linear-gradient(135deg, #203864 0%, #356df3 100%);
+    border: 1px solid rgba(255, 255, 255, .65);
+    box-shadow: 0 8px 22px rgba(53, 109, 243, .22);
+}
+
+.primary-btn:hover,
+.submit-btn:hover,
+.btn-primary:hover,
+button.primary:hover,
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(53, 109, 243, .3);
+    filter: brightness(1.04);
+}
+
+/* Inputs */
+
+input,
+select,
+textarea {
+    background: rgba(255, 255, 255, .78);
+    border: 1px solid rgba(148, 163, 184, .25);
+    border-radius: 14px;
+    color: var(--sg-navy);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #78a4ff;
+    box-shadow: 0 0 0 4px rgba(53, 109, 243, .10);
+}
+
+/* Header and navigation */
+
+header,
+.navbar,
+.topbar,
+.bottom-nav,
+.bottom-navigation,
+nav {
+    background: rgba(255, 255, 255, .78);
+    border-color: rgba(255, 255, 255, .85);
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+
+/* Status badges */
+
+.badge,
+.status-badge,
+.live-badge {
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+/* Notifications */
+
+.notification-card {
+    padding: 22px;
+}
+
+.notification-card.unread,
+.notification-card.unread-notification {
+    background: rgba(239, 245, 255, .92) !important;
+    border-color: rgba(112, 158, 255, .42) !important;
+}
+
+/* Tables */
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+thead th {
+    background: rgba(235, 242, 255, .9);
+}
+
+tbody tr:hover {
+    background: rgba(233, 241, 255, .65);
+}
+
+/* Map — don't obscure map tiles or controls */
+
+#map,
+#stopMap,
+.leaflet-container {
+    border-radius: 20px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.leaflet-control,
+.leaflet-popup-content-wrapper {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Smooth entrance */
+
+@keyframes studentGlassEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card,
+.stat-card,
+.dashboard-card,
+.bus-card,
+.route-card,
+.stop-card,
+.trip-card,
+.profile-card,
+.notification-card {
+    animation: studentGlassEnter .35s ease both;
+}
+
+/* Mobile premium styling */
+
+@media (max-width: 768px) {
+    :root {
+        --sg-radius: 19px;
+    }
+
+    .card,
+    .bus-card,
+    .route-card,
+    .stop-card,
+    .trip-card,
+    .profile-card,
+    .notification-card {
+        box-shadow: 0 9px 28px rgba(35, 64, 115, .08);
+    }
+
+    input,
+    select,
+    button,
+    .btn {
+        min-height: 42px;
+    }
+
+    #map {
+        min-height: 300px;
+    }
+}
+
+/* Respect reduced-motion settings */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

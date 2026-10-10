@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Login | BusTrack</title>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/glass.css">
+    <link rel="stylesheet" href="../css/admin/admin.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f7fb;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 440px;
+            padding: 24px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid #e3e8f1;
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(30, 50, 90, 0.12);
+        }
+
+        .login-logo {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef4ff;
+            border-radius: 20px;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .login-card h1 {
+            margin: 0;
+            color: #17233f;
+            font-size: 30px;
+        }
+
+        .login-subtitle {
+            color: #71809c;
+            margin: 8px 0 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #253352;
+        }
+
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            border: 1px solid #dce3ef;
+            border-radius: 14px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        .form-group input:focus {
+            border-color: #23375f;
+            box-shadow: 0 0 0 3px rgba(35, 55, 95, 0.08);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 14px;
+            background: #20355f;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: #fff0f0;
+            color: #b42318;
+            font-size: 14px;
+        }
+
+        .login-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #8a96aa;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-wrapper">
+
+        <div class="login-card">
+
+            <div class="login-logo">
+                🚌
+            </div>
+
+            <h1>Admin Login</h1>
+
+            <p class="login-subtitle">
+                Sign in to manage BusTrack
+            </p>
+
+            <form id="adminLoginForm">
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="admin@test.com"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginButton"
+                >
+                    Login
+                </button>
+
+            </form>
+
+            <div
+                id="errorMessage"
+                class="error-message"
+            ></div>
+
+            <div class="login-footer">
+                BusTrack Admin Portal
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../js/config/supabase.js"></script>
+
+    <script src="../js/auth/admin-auth.js"></script>
+
+</body>
+
+</html>

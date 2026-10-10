@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Driver Login | BusTrack</title>
+
+
+    <!-- Global Styles -->
+    <link
+        rel="stylesheet"
+        href="../css/global.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/glass.css"
+    >
+
+    <!-- Driver Styles -->
+    <link
+        rel="stylesheet"
+        href="../css/driver/driver.css"
+    >
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            margin: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5f8fc,
+                    #eef3fa
+                );
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+        }
+
+
+        /* =========================================
+           LOGIN WRAPPER
+        ========================================= */
+
+        .login-wrapper {
+
+            width: 100%;
+
+            max-width: 440px;
+
+            padding: 25px;
+
+        }
+
+
+        /* =========================================
+           LOGIN CARD
+        ========================================= */
+
+        .login-card {
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.90
+                );
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            border:
+                1px solid #dce5f0;
+
+            border-radius:
+                25px;
+
+            padding:
+                35px;
+
+            box-shadow:
+                0 20px 50px
+                rgba(
+                    30,
+                    50,
+                    80,
+                    0.10
+                );
+
+        }
+
+
+        /* =========================================
+           LOGO
+        ========================================= */
+
+        .driver-logo {
+
+            width: 72px;
+
+            height: 72px;
+
+            border-radius: 20px;
+
+            background:
+                #eef4ff;
+
+            border:
+                1px solid #dce7f5;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 36px;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        /* =========================================
+           LABEL
+        ========================================= */
+
+        .portal-label {
+
+            color:
+                #31558f;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1.5px;
+
+            margin:
+                0 0 8px;
+
+        }
+
+
+        /* =========================================
+           TITLE
+        ========================================= */
+
+        .login-card h1 {
+
+            margin: 0;
+
+            color:
+                #17233b;
+
+            font-size:
+                30px;
+
+            line-height:
+                1.2;
+
+        }
+
+
+        .subtitle {
+
+            margin:
+                8px 0 28px;
+
+            color:
+                #718096;
+
+            font-size:
+                15px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        /* =========================================
+           ERROR
+        ========================================= */
+
+        .error-message {
+
+            display: none;
+
+            margin-bottom:
+                18px;
+
+            padding:
+                12px 14px;
+
+            border-radius:
+                11px;
+
+            background:
+                #fff1f1;
+
+            border:
+                1px solid #ffd5d5;
+
+            color:
+                #c62828;
+
+            font-size:
+                13px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        .error-message.show {
+
+            display: block;
+
+        }
+
+
+        /* =========================================
+           FORM
+        ========================================= */
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+            margin-bottom:
+                18px;
+
+        }
+
+
+        .form-group label {
+
+            font-size:
+                14px;
+
+            font-weight:
+                700;
+
+            color:
+                #334155;
+
+        }
+
+
+        .form-group input {
+
+            width: 100%;
+
+            padding:
+                14px 15px;
+
+            border:
+                1px solid #dbe3ef;
+
+            border-radius:
+                13px;
+
+            background:
+                white;
+
+            color:
+                #17233b;
+
+            font-size:
+                15px;
+
+            outline:
+                none;
+
+            transition:
+                0.2s ease;
+
+        }
+
+
+        .form-group input::placeholder {
+
+            color:
+                #a0aec0;
+
+        }
+
+
+        .form-group input:focus {
+
+            border-color:
+                #31558f;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    49,
+                    85,
+                    143,
+                    0.08
+                );
+
+        }
+
+
+        /* =========================================
+           LOGIN BUTTON
+        ========================================= */
+
+        .login-btn {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius:
+                13px;
+
+            padding:
+                14px;
+
+            background:
+                #234477;
+
+            color:
+                white;
+
+            font-size:
+                15px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+
+            margin-top:
+                8px;
+
+            transition:
+                0.2s ease;
+
+        }
+
+
+        .login-btn:hover {
+
+            background:
+                #19355e;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        .login-btn:disabled {
+
+            opacity:
+                0.6;
+
+            cursor:
+                not-allowed;
+
+            transform:
+                none;
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .login-footer {
+
+            margin-top:
+                22px;
+
+            padding-top:
+                18px;
+
+            border-top:
+                1px solid #edf1f6;
+
+            text-align:
+                center;
+
+            color:
+                #718096;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .login-footer strong {
+
+            color:
+                #31558f;
+
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 500px) {
+
+            .login-wrapper {
+
+                padding:
+                    15px;
+
+            }
+
+
+            .login-card {
+
+                padding:
+                    25px;
+
+                border-radius:
+                    20px;
+
+            }
+
+
+            .login-card h1 {
+
+                font-size:
+                    26px;
+
+            }
+
+        }
+
+        .signup-section {
+    margin-top: 22px;
+    text-align: center;
+    border-top: 1px solid #e5eaf2;
+    padding-top: 20px;
+}
+
+.signup-section p {
+    margin: 0 0 12px;
+    color: #71809a;
+    font-size: 14px;
+}
+
+.signup-btn {
+    display: block;
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #294f88;
+    border-radius: 12px;
+    background: white;
+    color: #294f88;
+    text-decoration: none;
+    font-weight: 700;
+    text-align: center;
+    transition: 0.2s ease;
+}
+
+.signup-btn:hover {
+    background: #eef4ff;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="login-wrapper">
+
+
+        <section class="login-card">
+
+
+            <!-- LOGO -->
+
+            <div class="driver-logo">
+                🚌
+            </div>
+
+
+            <!-- LABEL -->
+
+            <p class="portal-label">
+                DRIVER PORTAL
+            </p>
+
+
+            <!-- TITLE -->
+
+            <h1>
+                Welcome Driver
+            </h1>
+
+
+            <p class="subtitle">
+                Login to manage your bus trips,
+                stops and live location.
+            </p>
+
+
+            <!-- ERROR -->
+
+            <div
+                id="loginError"
+                class="error-message"
+            ></div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form
+                id="driverLoginForm"
+                onsubmit="driverLogin(event)"
+            >
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="driver@example.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginButton"
+                >
+                    Login as Driver
+                </button>
+
+
+            </form>
+
+            <div class="signup-section">
+    <p>New driver?</p>
+
+    <a href="signup.html" class="signup-btn">
+        Create Driver Account
+    </a>
+</div>
+
+
+            <!-- FOOTER -->
+
+            <div class="login-footer">
+
+                BusTrack
+
+                <strong>
+                    Driver Management System
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================================
+         SUPABASE LIBRARY
+    ========================================= -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- =========================================
+         SUPABASE CONFIG
+    ========================================= -->
+
+    <script
+        src="../js/config/supabase.js"
+    ></script>
+
+
+    <!-- =========================================
+         DRIVER AUTH JS
+    ========================================= -->
+
+    <script
+        src="../js/auth/driver-auth.js"
+    ></script>
+
+
+</body>
+
+</html>

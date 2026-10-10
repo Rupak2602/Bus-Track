@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Route Management | BusTrack</title>
+
+    <!-- GLOBAL CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/global.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/glass.css"
+    >
+
+    <!-- ADMIN CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/admin/admin.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/admin/tables.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/admin/forms.css"
+    >
+
+    <style>
+
+        /* ==========================================
+           ROUTE ASSIGNMENT FIELDS
+        ========================================== */
+
+        .assignment-section {
+            grid-column: 1 / -1;
+
+            margin-top: 10px;
+            padding: 20px;
+
+            background: rgba(245, 248, 253, 0.8);
+
+            border: 1px solid #e1e8f2;
+
+            border-radius: 16px;
+        }
+
+        .assignment-title {
+            margin-bottom: 16px;
+        }
+
+        .assignment-title strong {
+            display: block;
+
+            color: #17233b;
+
+            font-size: 16px;
+
+            margin-bottom: 5px;
+        }
+
+        .assignment-title span {
+            color: #718096;
+
+            font-size: 13px;
+        }
+
+        .assignment-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+        .assignment-grid .form-group {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .assignment-grid label {
+            font-weight: 600;
+
+            color: #334155;
+
+            font-size: 14px;
+        }
+
+        .assignment-grid select {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #dbe3ef;
+
+            border-radius: 12px;
+
+            background: #ffffff;
+
+            color: #17233b;
+
+            font-size: 14px;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+        .assignment-grid select:focus {
+            border-color: #31558f;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(49, 85, 143, 0.10);
+        }
+
+        .assignment-help {
+            color: #7b8798;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        .route-assignment-badge {
+            display: inline-block;
+
+            margin-top: 7px;
+
+            padding: 5px 9px;
+
+            border-radius: 8px;
+
+            background: #eef4ff;
+
+            color: #31558f;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        @media (max-width: 700px) {
+
+            .assignment-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <header class="admin-header">
+
+        <div class="admin-header-left">
+
+            <div class="admin-logo">
+                🚌
+            </div>
+
+            <div>
+
+                <h1>
+                    BusTrack
+                </h1>
+
+                <span>
+                    Admin Portal
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-header-right">
+
+            <span class="admin-status">
+                ● Admin
+            </span>
+
+            <button
+                class="admin-profile-btn"
+                onclick="logoutAdmin()"
+            >
+                A
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==========================================
+         MAIN
+    =========================================== -->
+
+    <main class="admin-container">
+
+
+        <!-- PAGE TITLE -->
+
+        <section class="admin-page-title">
+
+            <div>
+
+                <p class="small-label">
+                    ROUTE MANAGEMENT
+                </p>
+
+                <h2>
+                    Routes
+                </h2>
+
+                <p>
+                    Create and manage all college bus routes.
+                </p>
+
+            </div>
+
+
+            <button
+                class="primary-btn"
+                onclick="openAddRouteForm()"
+            >
+                + Add Route
+            </button>
+
+        </section>
+
+
+        <!-- ==========================================
+             STATISTICS
+        =========================================== -->
+
+        <section class="admin-stats">
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Routes
+                </span>
+
+                <strong id="totalRoutes">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Active
+                </span>
+
+                <strong id="activeRoutes">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Inactive
+                </span>
+
+                <strong id="inactiveRoutes">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Total Stops
+                </span>
+
+                <strong id="totalRouteStops">
+                    0
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==========================================
+             ADD / EDIT ROUTE FORM
+        =========================================== -->
+
+        <section
+            id="routeFormSection"
+            class="admin-form-card"
+            style="display: none;"
+        >
+
+
+            <div class="form-header">
+
+                <div>
+
+                    <p class="small-label">
+                        ROUTE DETAILS
+                    </p>
+
+                    <h3 id="routeFormTitle">
+                        Add New Route
+                    </h3>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="close-btn"
+                    onclick="closeRouteForm()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="routeForm"
+                onsubmit="saveRoute(event)"
+            >
+
+                <!-- Hidden route ID -->
+
+                <input
+                    type="hidden"
+                    id="routeId"
+                >
+
+
+                <div class="form-grid">
+
+
+                    <!-- ROUTE NAME -->
+
+                    <div class="form-group">
+
+                        <label for="routeName">
+                            Route Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="routeName"
+                            placeholder="Example: Avadi - Ramapuram"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- START POINT -->
+
+                    <div class="form-group">
+
+                        <label for="startPoint">
+                            Start Point
+                        </label>
+
+                        <input
+                            type="text"
+                            id="startPoint"
+                            placeholder="Example: Avadi"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- END POINT -->
+
+                    <div class="form-group">
+
+                        <label for="endPoint">
+                            End Point
+                        </label>
+
+                        <input
+                            type="text"
+                            id="endPoint"
+                            placeholder="Example: SRM Ramapuram"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label for="routeStatus">
+                            Status
+                        </label>
+
+                        <select id="routeStatus">
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="inactive">
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ==================================
+                         BUS + DRIVER ASSIGNMENT
+                    =================================== -->
+
+                    <div class="assignment-section">
+
+                        <div class="assignment-title">
+
+                            <strong>
+                                🚌 Bus & Driver Assignment
+                            </strong>
+
+                            <span>
+                                Indha route-ku bus and driver select pannunga.
+                                Save pannumbodhu automatic-aa assignment create aagum.
+                            </span>
+
+                        </div>
+
+
+                        <div class="assignment-grid">
+
+
+                            <!-- BUS -->
+
+                            <div class="form-group">
+
+                                <label for="routeBusId">
+                                    Bus
+                                </label>
+
+                                <select
+                                    id="routeBusId"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Bus
+                                    </option>
+
+                                </select>
+
+                                <div class="assignment-help">
+                                    Indha route-ku use panna bus.
+                                </div>
+
+                            </div>
+
+
+                            <!-- DRIVER -->
+
+                            <div class="form-group">
+
+                                <label for="routeDriverId">
+                                    Driver
+                                </label>
+
+                                <select
+                                    id="routeDriverId"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Driver
+                                    </option>
+
+                                </select>
+
+                                <div class="assignment-help">
+                                    Indha route-ku assigned driver.
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div
+                        class="form-group"
+                        style="grid-column: 1 / -1;"
+                    >
+
+                        <label for="routeDescription">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="routeDescription"
+                            rows="4"
+                            placeholder="Example: Route through Avadi, Thirumullaivoyal, Ambattur, Porur and Ramapuram."
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- FORM BUTTONS -->
+
+                <div class="form-actions">
+
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        onclick="closeRouteForm()"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                    >
+                        Save Route
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+        <!-- ==========================================
+             ROUTE LIST
+        =========================================== -->
+
+        <section class="admin-table-card">
+
+
+            <div class="table-header">
+
+                <div>
+
+                    <p class="small-label">
+                        ALL ROUTES
+                    </p>
+
+                    <h3>
+                        Route List
+                    </h3>
+
+                </div>
+
+
+                <input
+                    type="search"
+                    id="routeSearch"
+                    placeholder="Search routes..."
+                    oninput="filterRoutes()"
+                >
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Route
+                            </th>
+
+                            <th>
+                                Start Point
+                            </th>
+
+                            <th>
+                                End Point
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="routeTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="empty-table"
+                            >
+                                Loading routes...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <script
+        src="../js/config/supabase.js"
+    ></script>
+
+
+    <!-- ROUTE JS -->
+
+    <script
+        src="../js/admin/routes.js"
+    ></script>
+
+
+</body>
+
+</html>

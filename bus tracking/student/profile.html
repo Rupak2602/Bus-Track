@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile | BusTrack</title>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/student/student.css">
+    <link rel="stylesheet" href="../css/student-glass.css">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #f3f6fc;
+            color: #172b4d;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 5%;
+            background: rgba(255,255,255,.85);
+            border-bottom: 1px solid #e1e8f5;
+        }
+
+        .brand { font-size: 25px; font-weight: 800; }
+        .subbrand { margin-top: 4px; color: #7183a2; font-size: 14px; }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 19px;
+            border: 0;
+            border-radius: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-primary { background: #203864; color: white; }
+        .btn-light { background: #eaf0fc; color: #203864; }
+        .btn-danger { background: #fff0f0; color: #c62828; }
+
+        .page {
+            width: min(900px, 92%);
+            margin: 35px auto 60px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 34px); }
+        .muted { color: #7183a2; line-height: 1.6; }
+
+        .glass-card {
+            background: rgba(255,255,255,.78);
+            border: 1px solid white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 14px 40px rgba(35,64,115,.08);
+            backdrop-filter: blur(20px);
+        }
+
+        .identity {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .avatar {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 82px;
+            height: 82px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #e7edff, #dce7ff);
+            font-size: 36px;
+        }
+
+        .identity h2 { margin: 0 0 8px; }
+        .identity p { margin: 0 0 8px; color: #7183a2; overflow-wrap: anywhere; }
+
+        .section-title { margin: 0 0 20px; font-size: 21px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field { display: flex; flex-direction: column; gap: 8px; }
+        .field.full { grid-column: 1 / -1; }
+
+        .field label { font-weight: 650; font-size: 14px; }
+
+        .field input,
+        .field select {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid #dce5f4;
+            border-radius: 13px;
+            background: rgba(255,255,255,.9);
+            color: #172b4d;
+            font: inherit;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: #6d98ff;
+            box-shadow: 0 0 0 4px rgba(53,109,243,.1);
+        }
+
+        .field input[readonly] {
+            background: #f0f4fb;
+            color: #657591;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        #message {
+            display: none;
+            padding: 13px 15px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+        }
+
+        #message.success { display: block; background: #e8f8ee; color: #137943; }
+        #message.error { display: block; background: #fff0f0; color: #b42323; }
+        #message.info { display: block; background: #eaf1ff; color: #244b94; }
+
+        .bottom-note { font-size: 13px; color: #7183a2; margin-top: 14px; }
+
+        @media (max-width: 600px) {
+            .topbar { padding: 15px 4%; }
+            .page { margin-top: 25px; }
+            .page-heading { align-items: flex-start; }
+            .glass-card { padding: 19px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .field.full { grid-column: auto; }
+            .avatar { width: 65px; height: 65px; border-radius: 20px; }
+            .page-heading .btn { padding: 11px 12px; }
+            .actions .btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div>
+            <div class="brand">🚌 BusTrack</div>
+            <div class="subbrand">Student Portal</div>
+        </div>
+        <a class="btn btn-light" href="dashboard.html">← Dashboard</a>
+    </header>
+
+    <main class="page">
+        <div class="page-heading">
+            <div>
+                <h1>👤 Student Profile</h1>
+                <div class="muted">Un personal details inga manage pannalaam.</div>
+            </div>
+            <button class="btn btn-danger" id="logoutBtn" type="button">Logout</button>
+        </div>
+
+        <div id="message" role="status" aria-live="polite"></div>
+
+        <section class="glass-card">
+            <div class="identity">
+                <div class="avatar">🎓</div>
+                <div>
+                    <h2 id="displayName">Loading profile...</h2>
+                    <p id="displayEmail">Please wait</p>
+                    <p id="displayStudentId">Student ID: —</p>
+                </div>
+            </div>
+        </section>
+
+        <form id="profileForm">
+            <section class="glass-card">
+                <h2 class="section-title">Personal Information</h2>
+
+                <div class="form-grid">
+                    <div class="field full">
+                        <label for="fullName">Full Name *</label>
+                        <input id="fullName" name="fullName" type="text"
+                               maxlength="100" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="field full">
+                        <label for="email">Email Address</label>
+                        <input id="email" type="email" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone Number</label>
+                        <input id="phone" name="phone" type="tel"
+                               maxlength="15" placeholder="Enter phone number">
+                    </div>
+
+                    <div class="field">
+                        <label for="studentId">Register / Student ID</label>
+                        <input id="studentId" type="text" readonly>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card">
+                <h2 class="section-title">College Information</h2>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="department">Department</label>
+                        <input id="department" name="department" type="text"
+                               maxlength="100" placeholder="e.g. CSE">
+                    </div>
+
+                    <div class="field">
+                        <label for="year">Year of Study</label>
+                        <select id="year" name="year">
+                            <option value="">Select year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="section">Section</label>
+                        <input id="section" name="section" type="text"
+                               maxlength="20" placeholder="e.g. A">
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="saveBtn" type="submit">
+                        Save Changes
+                    </button>
+                    <button class="btn btn-light" type="button" id="resetBtn">
+                        Reset Changes
+                    </button>
+                </div>
+
+                <p class="bottom-note">
+                    Email and Student ID read-only. Mattha details save pannalaam.
+                </p>
+            </section>
+        </form>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config/supabase.js"></script>
+    <script src="../js/student/profile.js"></script>
+</body>
+</html>

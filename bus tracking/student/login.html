@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Login | Bus Tracking System</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="../css/global.css">
+
+    <!-- Glass UI -->
+    <link rel="stylesheet" href="../css/glass.css">
+
+    <!-- Student CSS -->
+    <link rel="stylesheet" href="../css/student/student.css">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f6f8fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 35px 30px;
+            box-shadow: 0 20px 60px rgba(20, 35, 60, 0.12);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef4ff;
+            font-size: 30px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 25px;
+            color: #172033;
+        }
+
+        .brand p {
+            margin: 8px 0 0;
+            color: #7b8495;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #30394a;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 52px;
+            box-sizing: border-box;
+            border: 1px solid #e1e6ee;
+            border-radius: 15px;
+            padding: 0 16px;
+            font-size: 15px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.8);
+            transition: 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #7d9edb;
+            box-shadow: 0 0 0 4px rgba(125, 158, 219, 0.10);
+        }
+
+        .password-input {
+            padding-right: 50px !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+        }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 5px 0 22px;
+            font-size: 13px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #687386;
+        }
+
+        .remember input {
+            accent-color: #506fa8;
+        }
+
+        .forgot-link {
+            color: #506fa8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 53px;
+            border: none;
+            border-radius: 16px;
+            background: #1d2d4f;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(29, 45, 79, 0.20);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff1f1;
+            color: #b42318;
+            border: 1px solid #ffd5d5;
+        }
+
+        .message.success {
+            display: block;
+            background: #effaf3;
+            color: #18733a;
+            border: 1px solid #ccefd8;
+        }
+
+        .signup-text {
+            text-align: center;
+            margin-top: 24px;
+            color: #7b8495;
+            font-size: 14px;
+        }
+
+        .signup-text a {
+            color: #506fa8;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #8a93a3;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .login-card {
+                padding: 30px 22px;
+                border-radius: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="login-container">
+
+        <section class="login-card">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🚌
+                </div>
+
+                <h1>Welcome Back</h1>
+
+                <p>Student Bus Tracking System</p>
+
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <form id="studentLoginForm">
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Student Email
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            class="password-input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="toggle-password"
+                            aria-label="Show password"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-options">
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                            checked
+                        >
+
+                        Remember me
+
+                    </label>
+
+                    <a
+                        href="#"
+                        id="forgotPassword"
+                        class="forgot-link"
+                    >
+                        Forgot password?
+                    </a>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    id="loginBtn"
+                    class="login-btn"
+                >
+                    Sign In
+                </button>
+
+            </form>
+
+
+            <div class="signup-text">
+
+                Don't have an account?
+
+                <a href="signup.html">
+                    Create account
+                </a>
+
+            </div>
+
+
+            <a
+                href="../index.html"
+                class="back-home"
+            >
+                ← Back to Home
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Supabase Configuration -->
+    <script src="../js/config/supabase.js"></script>
+
+    <!-- Student Authentication -->
+    <script src="../js/auth/student-auth.js"></script>
+
+</body>
+</html>
