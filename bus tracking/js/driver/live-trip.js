@@ -362,16 +362,21 @@ async function createStopNotifications(stop) {
     if (!currentTrip || !stop) return;
 
     try {
-        const { data: students, error: studentsError } =
-            await supabaseClient
-                .from("students")
-                .select("id");
+       const { data: students, error: studentsError } =
+  await supabaseClient
+    .from("students")
+    .select("id, profile_id");
 
-        if (studentsError) throw studentsError;
-        if (!students?.length) {
-            console.log("No students found.");
-            return;
-        }
+console.log("Students query result:", students);
+console.log("Students query error:", studentsError);
+
+if (studentsError) throw studentsError;
+
+if (!students || students.length === 0) {
+  console.log("No students returned. Check SELECT RLS policy.");
+  return;
+}
+        
 
         const { data: existing, error: existingError } =
             await supabaseClient
